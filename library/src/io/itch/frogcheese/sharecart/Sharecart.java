@@ -1,11 +1,17 @@
 package io.itch.frogcheese.sharecart;
 
-public class Sharecart {
+/**
+ * Wrapper around the sharecart parameters.
+ */
+class Sharecart {
+    private static final String DEFAULT_NAME = "CHANGEME";
+
     private short x;
     private short y;
     private int[] misc = new int[Constraints.MISC_ITEMS_LENGTH];
     private String name;
     private boolean[] switches = new boolean[Constraints.SWITCH_ITEMS_LENGTH];
+
 
     public static Sharecart withDefaults() {
         Sharecart sharecart = new Sharecart();
@@ -14,7 +20,7 @@ public class Sharecart {
         for (int i = 0; i < Constraints.MISC_ITEMS_LENGTH; i++) {
             sharecart.misc(i, 0);
         }
-        sharecart.name("CHANGEME");
+        sharecart.name(DEFAULT_NAME);
         for (int i = 0; i < Constraints.SWITCH_ITEMS_LENGTH; i++) {
             sharecart.switchValue(i, false);
         }

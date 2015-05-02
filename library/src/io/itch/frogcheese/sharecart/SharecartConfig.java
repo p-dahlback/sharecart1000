@@ -7,7 +7,8 @@ public class SharecartConfig {
 
     private boolean createSharecartIfNotExists = false;
     private int directoryLevelsToCheck = 4;
-    private boolean clampAutomatically = false;
+    private boolean clampToConstraints = false;
+    private String applicationPath;
 
     /**
      * Utility class for creating a SharecartConfig instance.
@@ -48,7 +49,18 @@ public class SharecartConfig {
          * @return
          */
         public Builder setClampToConstraints(boolean clampToConstraints) {
-            config.clampAutomatically = clampToConstraints;
+            config.clampToConstraints = clampToConstraints;
+            return this;
+        }
+
+        /**
+         * Sets the file system path to the running application. This will be used when searching for the sharecart file.
+         *
+         * @param path the path that will represent the location of the application.
+         * @return
+         */
+        public Builder setApplicationPath(String path) {
+            config.applicationPath = path;
             return this;
         }
 
@@ -70,7 +82,12 @@ public class SharecartConfig {
     private SharecartConfig(SharecartConfig other) {
         createSharecartIfNotExists = other.createSharecartIfNotExists;
         directoryLevelsToCheck = other.directoryLevelsToCheck;
-        clampAutomatically = other.clampAutomatically;
+        clampToConstraints = other.clampToConstraints;
+        applicationPath = other.applicationPath;
+
+        if (applicationPath == null) {
+            applicationPath = SharecartFileUtils.getAppLocation();
+        }
     }
 
     /**
@@ -91,7 +108,14 @@ public class SharecartConfig {
      * @return Whether or not the sharecart parameters will automatically be clamped to be within constraints.
      */
     public boolean willClampToConstraints() {
-        return clampAutomatically;
+        return clampToConstraints;
+    }
+
+    /**
+     * @return The absolute path of the running application.
+     */
+    public String getApplicationPath() {
+        return applicationPath;
     }
 
 }

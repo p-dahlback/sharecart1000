@@ -1,8 +1,11 @@
-package io.itch.frogcheese.sharecart.io;
+package io.itch.frogcheese.sharecart;
 
 import java.io.File;
 
-public class FileUtils {
+/**
+ * Some utilities for handling sharecart files.
+ */
+class SharecartFileUtils {
 
 	private static String RUNNING_DIR = null;
 	private static String APP_DIR = null;
@@ -24,7 +27,7 @@ public class FileUtils {
 			}
 
 			if(dir == null) {
-				APP_DIR = FileUtils.getRunningLocation();
+				APP_DIR = SharecartFileUtils.getRunningLocation();
 			} else {
 				APP_DIR = dir;
 			}
@@ -33,11 +36,11 @@ public class FileUtils {
 	}
 
 	public static File fileFromRunningLocation(String filePath) {
-		return new File(FileUtils.getRunningLocation(), filePath);
+		return new File(SharecartFileUtils.getRunningLocation(), filePath);
 	}
 
 	public static File fileAboveRunningLocation(int levels, String filePath) {
-		return FileUtils.fileAboveLocation(levels, FileUtils.getRunningLocation(), filePath);
+		return SharecartFileUtils.fileAboveLocation(levels, SharecartFileUtils.getRunningLocation(), filePath);
 	}
 
 	public static File fileAboveLocation(int levels, String location, String filePath) {

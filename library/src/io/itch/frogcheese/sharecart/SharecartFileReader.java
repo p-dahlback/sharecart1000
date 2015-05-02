@@ -1,7 +1,5 @@
-package io.itch.frogcheese.sharecart.io;
+package io.itch.frogcheese.sharecart;
 
-import io.itch.frogcheese.sharecart.Constraints;
-import io.itch.frogcheese.sharecart.Sharecart;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.Closeable;
@@ -10,16 +8,19 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Scanner;
 
-public class SharecartReader implements Closeable {
+/**
+ * Handles reading from a sharecart file.
+ */
+class SharecartFileReader implements Closeable {
     Scanner scanner;
 
-    public SharecartReader(String path) throws FileNotFoundException {
+    public SharecartFileReader(String path) throws FileNotFoundException {
         this(new File(path));
     }
 
-    public SharecartReader(File sharecart) throws FileNotFoundException {
+    public SharecartFileReader(File sharecart) throws FileNotFoundException {
         this.scanner = new Scanner(sharecart)
-                .useDelimiter(Constants.DELIMITER_PARAMETER_PATTERN);
+                .useDelimiter(SharecartFileConstants.DELIMITER_PARAMETER_PATTERN);
         this.scanner.next();
     }
 
@@ -28,11 +29,11 @@ public class SharecartReader implements Closeable {
 
         ret.x(readShort());
         ret.y(readShort());
-        for (int i = 0; i < Constants.PARAMETER_MISC.length; i++) {
+        for (int i = 0; i < SharecartFileConstants.PARAMETER_MISC.length; i++) {
             ret.misc(i, Constraints.clampMisc(readInt()));
         }
         ret.name(readString());
-        for (int i = 0; i < Constants.PARAMETER_SWITCH.length; i++) {
+        for (int i = 0; i < SharecartFileConstants.PARAMETER_SWITCH.length; i++) {
             ret.switchValue(i, readBoolean());
         }
 
@@ -52,7 +53,7 @@ public class SharecartReader implements Closeable {
 
     private String readString() {
         String token = this.scanner.next();
-        int firstIndex = token.indexOf(Constants.DELIMITER_VALUE);
+        int firstIndex = token.indexOf(SharecartFileConstants.DELIMITER_VALUE);
         if (firstIndex < token.length() - 1) {
             String valueString = token.substring(firstIndex + 1).replaceAll("\r", "");
             if (valueString.startsWith("\"") && valueString.length() > 1) {

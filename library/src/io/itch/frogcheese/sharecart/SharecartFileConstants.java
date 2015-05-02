@@ -1,6 +1,9 @@
-package io.itch.frogcheese.sharecart.io;
+package io.itch.frogcheese.sharecart;
 
-class Constants {
+/**
+ * Constants for the sharecart file.
+ */
+class SharecartFileConstants {
 
     public static final String TITLE = "[MAIN]";
 
