@@ -1,0 +1,4 @@
+rootProject.name = 'sharecart'
+
+include 'library'
+
