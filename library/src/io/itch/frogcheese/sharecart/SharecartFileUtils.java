@@ -7,13 +7,13 @@ import java.io.File;
  */
 class SharecartFileUtils {
 
-	private static String RUNNING_DIR = null;
-	private static String APP_DIR = null;
+	static String RUNNING_DIR = null;
+	static String APP_DIR = null;
 
 	/**
 	 * @return The absolute path to the running directory.
 	 */
-	public static String getRunningLocation() {
+	public static String getRunningDirectory() {
 		if(RUNNING_DIR == null) {
 			RUNNING_DIR = new File("").getAbsolutePath();
 		}
@@ -23,7 +23,7 @@ class SharecartFileUtils {
 	/**
 	 * @return The absolute path to the application package.
 	 */
-	public static String getApplicationLocation() {
+	public static String getApplicationPath() {
 		if(APP_DIR == null) {
 			String dir = null;
 			try {
@@ -33,7 +33,7 @@ class SharecartFileUtils {
 			}
 
 			if(dir == null) {
-				APP_DIR = SharecartFileUtils.getRunningLocation();
+				APP_DIR = SharecartFileUtils.getRunningDirectory();
 			} else {
 				APP_DIR = dir;
 			}
@@ -47,8 +47,8 @@ class SharecartFileUtils {
 	 * @return A new File instance for the provided path. Check {@link File#exists()} to see if a file
 	 * actually exists at that location.
 	 */
-	public static File fileFromRunningLocation(String filePath) {
-		return new File(SharecartFileUtils.getRunningLocation(), filePath);
+	public static File getFileFromRunningDirectory(String filePath) {
+		return new File(SharecartFileUtils.getRunningDirectory(), filePath);
 	}
 
 	/**
@@ -57,11 +57,11 @@ class SharecartFileUtils {
 	 * @param filePath the relative path to the file
 	 * @return A new File instance for the provided path. Check {@link File#exists()} to see if a file
 	 * actually exists at that location.
-	 * @see #getRunningLocation()
-	 * @see #fileAboveLocation(int, String, String)
+	 * @see #getRunningDirectory()
+	 * @see #getFileAboveDirectory(int, String, String)
 	 */
-	public static File fileAboveRunningLocation(int levels, String filePath) {
-		return SharecartFileUtils.fileAboveLocation(levels, SharecartFileUtils.getRunningLocation(), filePath);
+	public static File getFileAboveRunningDirectory(int levels, String filePath) {
+		return SharecartFileUtils.getFileAboveDirectory(levels, SharecartFileUtils.getRunningDirectory(), filePath);
 	}
 
 	/**
@@ -71,9 +71,9 @@ class SharecartFileUtils {
 	 * @param filePath the relative path to the file
 	 * @return A new File instance for the provided path. Check {@link File#exists()} to see if a file
 	 * actually exists at that location.
-	 * @see #fileAboveRunningLocation(int, String)
+	 * @see #getFileAboveRunningDirectory(int, String)
 	 */
-	public static File fileAboveLocation(int levels, String directory, String filePath) {
+	public static File getFileAboveDirectory(int levels, String directory, String filePath) {
 		StringBuilder file = new StringBuilder(filePath);
 		for(int i = 0; i < levels; i++) {
 			file.insert(0, "../");

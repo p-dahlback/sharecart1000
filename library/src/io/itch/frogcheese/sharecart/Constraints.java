@@ -8,11 +8,11 @@ public class Constraints {
     /**
      * Constant: maximum size for the X parameter.
      */
-    public static short MAX_SIZE_X = 1023;
+    public static int MAX_SIZE_X = 1023;
     /**
      * Constant: maximum size for the y parameter.
      */
-    public static short MAX_SIZE_Y = 1023;
+    public static int MAX_SIZE_Y = 1023;
     /**
      * Constant: maximum size for the misc parameters.
      */
@@ -34,7 +34,7 @@ public class Constraints {
      * @param x the value to check.
      * @return Whether or not the given value conforms to the constraints for the x parameter.
      */
-    public static boolean validX(short x) {
+    public static boolean validX(int x) {
         return Constraints.validInteger(x, MAX_SIZE_X);
     }
 
@@ -44,7 +44,7 @@ public class Constraints {
      * @param x the value to check.
      * @return the provided value, clamped to be within the constraints for x.
      */
-    public static short clampX(short x) {
+    public static short clampX(int x) {
         return (short) (x < 0 ? 0 : Math.min(x, MAX_SIZE_X));
     }
 
@@ -52,7 +52,7 @@ public class Constraints {
      * @param y the value to check.
      * @return Whether or not the given value conforms to the constraints for the y parameter.
      */
-    public static boolean validY(short y) {
+    public static boolean validY(int y) {
         return Constraints.validInteger(y, MAX_SIZE_Y);
     }
 
@@ -62,7 +62,7 @@ public class Constraints {
      * @param y the value to check.
      * @return the provided value, clamped to be within the constraints for y.
      */
-    public static short clampY(short y) {
+    public static short clampY(int y) {
         return (short) (y < 0 ? 0 : Math.min(y, MAX_SIZE_Y));
     }
 
@@ -79,7 +79,7 @@ public class Constraints {
      * @return Whether or not the given index is a valid misc parameter.
      */
     public static boolean validMiscIndex(int index) {
-        return Constraints.validInteger(index, MISC_ITEMS_LENGTH);
+        return Constraints.validInteger(index, MISC_ITEMS_LENGTH - 1);
     }
 
     /**
@@ -120,7 +120,7 @@ public class Constraints {
      * @return Whether or not the given index is a valid switch parameter.
      */
     public static boolean validSwitchIndex(int index) {
-        return Constraints.validInteger(index, SWITCH_ITEMS_LENGTH);
+        return Constraints.validInteger(index, SWITCH_ITEMS_LENGTH - 1);
     }
 
     private static boolean validInteger(int integer, int maxSize) {

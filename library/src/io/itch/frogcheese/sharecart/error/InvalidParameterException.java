@@ -1,5 +1,7 @@
 package io.itch.frogcheese.sharecart.error;
 
+import java.util.Locale;
+
 /**
  * Describes when a parameter could not be modified because the new value
  * was invalid.
@@ -24,7 +26,7 @@ public class InvalidParameterException extends SharecartException {
     }
 
     public InvalidParameterException(String parameter, String value) {
-        super(value + " is not a valid value for parameter " + parameter);
+        super(String.format(Locale.US, "'%s' is not a valid value for parameter '%s'", value, parameter));
     }
 
 }

@@ -4,7 +4,6 @@ import io.itch.frogcheese.sharecart.error.InvalidParameterException;
 import io.itch.frogcheese.sharecart.error.ParameterNotAccessibleException;
 import io.itch.frogcheese.sharecart.error.SharecartException;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
@@ -13,20 +12,17 @@ import java.io.IOException;
  */
 public class SharecartManager {
 
-    private static final String DAT_DIRECTORY = "dat";
-    private static final String SHARECART_FILE = "o_o.ini";
-
     private static SharecartManager INSTANCE;
 
-    public File datDirectory;
-    public File shareCartFile;
+    public SharecartFile shareCartFile;
 
+    private SharecartFileInterface fileInterface;
     private SharecartConfig config;
 
     private Sharecart sharecart;
     private boolean valid = false;
     private boolean loaded = false;
-    private boolean saved = false;
+    private boolean saved = true;
 
     /**
      * Initializes the manager with the given configuration.
@@ -51,86 +47,57 @@ public class SharecartManager {
 
     private SharecartManager(SharecartConfig config) {
         this.config = config;
+        this.fileInterface = SharecartFileInterface.get();
     }
 
     /**
      * Checks to see if there is a valid sharecart file. If there is not,
-     * it will create a sharecart file if configured in {@link SharecartConfig}.
+     * it may create a sharecart file if configured to in {@link SharecartConfig}.
      *
      * @return {@code true} if there was a valid file, or if the file was successfully created. {@code false} otherwise.
      */
-    public boolean isValidCart() {
-        for (int i = 0; i <= config.getDirectoryLevelsToCheck(); i++) {
-            File file = SharecartFileUtils.fileAboveRunningLocation(i, DAT_DIRECTORY);
-            if (file.exists()) {
-                this.datDirectory = file;
-                file = new File(this.datDirectory, SHARECART_FILE);
-                if (file.exists()) {
-                    this.shareCartFile = file;
-                    return this.valid = true;
-                } else if (createIniFile())
-                    return this.valid = true;
-            }
-        }
-
-        return config.willCreateIfNotExists() && (this.valid = createDatDirectory());
-    }
-
-    private boolean createDatDirectory() {
-        for (int i = 0; i <= config.getDirectoryLevelsToCheck(); i++) {
-            File dir = SharecartFileUtils.fileAboveLocation(i, config.getApplicationPath(), "../");
-            if (dir.exists() && dir.isDirectory()) {
-                File dat = new File(dir, DAT_DIRECTORY);
-                if (dat.mkdirs()) {
-                    this.datDirectory = dat;
-                    return createIniFile();
-                }
-            }
-        }
-        return false;
-    }
-
-    private boolean createIniFile() {
-        File file = new File(this.datDirectory, SHARECART_FILE);
-        if (file.exists()) {
-            this.shareCartFile = file;
-            return this.valid = true;
+    public boolean validateSharecartFile() {
+        if (this.config.willAutoCreateFile()) {
+            this.shareCartFile = this.fileInterface.findOrCreateIniFile(this.config.getDirectoryLevelsToCheck(),
+                    this.config.getApplicationPath());
         } else {
-            try {
-                if (file.createNewFile()) {
-                    this.valid = true;
-                    this.loaded = true;
-                    this.shareCartFile = file;
-                    this.sharecart = Sharecart.withDefaults();
-                    save();
-                    return true;
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return this.valid = false;
+            this.shareCartFile = this.fileInterface.findIniFile(this.config.getDirectoryLevelsToCheck(),
+                    this.config.getApplicationPath());
         }
+
+        this.valid = this.shareCartFile != null;
+        return this.valid;
     }
 
     /**
      * Loads the contents of a valid sharecart file. This will perform IO operations on the current thread.
-     * This method cannot be called before a successful call to {@link #isValidCart()}.
+     * This method cannot be called before a successful call to {@link #validateSharecartFile()}.
      *
      * @return {@code true} if the contents of the file was successfully loaded. {@code false} otherwise.
-     * @throws IllegalStateException if {@link #isValidCart()} hasn't been successfully called
+     * @throws IllegalStateException if {@link #validateSharecartFile()} hasn't been successfully called
      * @throws SharecartException    if an unhandled error occurs when reading the sharecart. This will only be thrown if
-     *                               {@link SharecartConfig#isStrictFileMode()} is false.
+     *                               {@link SharecartConfig#isStrictFileReadMode()} is false.
      */
     public boolean load() {
         if (!this.valid)
-            throw new IllegalStateException("Cannot load file before isValidCart() has been called.");
+            throw new IllegalStateException("Cannot load file before validateSharecartFile() has been called.");
+
+        if (shareCartFile.isAutoCreated()) {
+            this.loaded = true;
+            this.sharecart = Sharecart.withDefaults();
+            save();
+
+            shareCartFile.setIsAutoCreated(false);
+            return true;
+        }
 
         try {
-            SharecartFileReader reader = new SharecartFileReader(this.shareCartFile);
-            reader.setIsStrict(config.isStrictFileMode());
+            SharecartFileReader reader = fileInterface.getNewSharecartFileReader(this.shareCartFile);
+            reader.setIsStrict(config.isStrictFileReadMode());
             this.sharecart = reader.read();
             reader.close();
 
+            this.saved = true;
             return this.loaded = true;
 
         } catch (IOException e) {
@@ -138,12 +105,12 @@ public class SharecartManager {
             this.valid = false;
             this.loaded = false;
             this.sharecart = null;
-            if (config.isStrictFileMode())
+            if (config.isStrictFileReadMode())
                 throw new SharecartException(e);
             return false;
 
         } catch (SharecartException e) {
-            if (config.isStrictFileMode()) {
+            if (config.isStrictFileReadMode()) {
                 throw e;
             } else {
                 e.printStackTrace();
@@ -159,25 +126,24 @@ public class SharecartManager {
      * Saves changes to the sharecart file. This will perform IO operations on the current thread.
      *
      * @return {@code true} if the changes could be saved.
-     * @throws IllegalStateException if {@link #isValidCart()} or {@link #load()} have not been called.
+     * @throws IllegalStateException if {@link #validateSharecartFile()} or {@link #load()} have not been called.
      */
     public boolean save() {
         if (!this.valid)
             throw new IllegalStateException(
-                    "Cannot load file before isValidCart() has been called.");
+                    "Cannot load file before validateSharecartFile() has been called.");
         if (!this.loaded || this.sharecart == null)
             throw new IllegalStateException(
                     "Cannot save file before it has been loaded at least once.");
 
         try {
-            SharecartFileWriter writer = new SharecartFileWriter(this.shareCartFile);
+            SharecartFileWriter writer = fileInterface.getNewSharecartFileWriter(this.shareCartFile);
             writer.write(this.sharecart);
             writer.close();
 
             return this.saved = true;
         } catch (FileNotFoundException e) {
             e.printStackTrace();
-
             return false;
         } catch (IOException e) {
             e.printStackTrace();
@@ -190,7 +156,7 @@ public class SharecartManager {
      * @return the current value of the X parameter.
      * @throws ParameterNotAccessibleException if the sharecart wasn't initialized.
      */
-    public short x() {
+    public int x() {
         if (!isReadable())
             throw new ParameterNotAccessibleException("x");
 
@@ -201,7 +167,7 @@ public class SharecartManager {
      * @return the current value of the Y parameter.
      * @throws ParameterNotAccessibleException if the sharecart wasn't initialized.
      */
-    public short y() {
+    public int y() {
         if (!isReadable())
             throw new ParameterNotAccessibleException("y");
 
@@ -215,7 +181,7 @@ public class SharecartManager {
      * @throws ParameterNotAccessibleException if the sharecart wasn't initialized.
      * @throws InvalidParameterException       if the value did not fit the constraints.
      */
-    public void x(short value) {
+    public void x(int value) {
         if (!isWritable())
             throw new ParameterNotAccessibleException("x");
 
@@ -236,7 +202,7 @@ public class SharecartManager {
      * @throws ParameterNotAccessibleException if the sharecart wasn't initialized.
      * @throws InvalidParameterException       if the value did not fit the constraints.
      */
-    public void y(short value) {
+    public void y(int value) {
         if (!isWritable())
             throw new ParameterNotAccessibleException("y");
 
@@ -354,6 +320,13 @@ public class SharecartManager {
     }
 
     /**
+     * @return Whether or not a valid sharecart file has been found.
+     */
+    public boolean isValidSharecartFile() {
+        return this.valid;
+    }
+
+    /**
      * @return Whether or not the sharecart has been successfully loaded.
      */
     public boolean isLoaded() {
@@ -365,6 +338,10 @@ public class SharecartManager {
      */
     public boolean hasUnsavedChanges() {
         return !this.saved;
+    }
+
+    SharecartConfig getConfig() {
+        return config;
     }
 
     private boolean isReadable() {

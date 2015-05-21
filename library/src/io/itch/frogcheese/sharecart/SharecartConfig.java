@@ -5,8 +5,10 @@ package io.itch.frogcheese.sharecart;
  */
 public class SharecartConfig {
 
+    static final int DEFAULT_LEVELS_TO_CHECK = 4;
+
     private boolean createSharecartIfNotExists = false;
-    private int directoryLevelsToCheck = 4;
+    private int directoryLevelsToCheck = DEFAULT_LEVELS_TO_CHECK;
     private boolean clampToConstraints = false;
     private boolean strictFileMode = false;
     private String applicationPath;
@@ -27,7 +29,7 @@ public class SharecartConfig {
          * @param create if true, a new sharecart file with the correct structure will be created if one isn't found.
          * @return This Builder instance.
          */
-        public Builder setCreateIfNotExists(boolean create) {
+        public Builder setAutoCreateFile(boolean create) {
             config.createSharecartIfNotExists = create;
             return this;
         }
@@ -40,7 +42,7 @@ public class SharecartConfig {
          *               If false, exceptions will be thrown on encountered errors.
          * @return This Builder instance.
          */
-        public Builder setStrictFileMode(boolean strict) {
+        public Builder setStrictFileReadMode(boolean strict) {
             config.strictFileMode = strict;
             return this;
         }
@@ -52,6 +54,9 @@ public class SharecartConfig {
          * @return This Builder instance.
          */
         public Builder setDirectoryLevelsToCheck(int levels) {
+            if (levels < 0) {
+                throw new IllegalArgumentException("Levels to check cannot be a negative number. Number was " + levels);
+            }
             config.directoryLevelsToCheck = levels;
             return this;
         }
@@ -103,14 +108,14 @@ public class SharecartConfig {
         applicationPath = other.applicationPath;
 
         if (applicationPath == null) {
-            applicationPath = SharecartFileUtils.getApplicationLocation();
+            applicationPath = SharecartFileUtils.getApplicationPath();
         }
     }
 
     /**
      * @return Whether or not the sharecart file will be created if it is missing.
      */
-    public boolean willCreateIfNotExists() {
+    public boolean willAutoCreateFile() {
         return createSharecartIfNotExists;
     }
 
@@ -132,7 +137,7 @@ public class SharecartConfig {
      * @return Whether default values will be assigned when encountering errors in the sharecart file,
      * or exceptions will be thrown. If true, exceptions will be thrown for faulty files.
      */
-    public boolean isStrictFileMode() {
+    public boolean isStrictFileReadMode() {
         return strictFileMode;
     }
 
