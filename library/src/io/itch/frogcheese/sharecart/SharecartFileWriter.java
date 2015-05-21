@@ -13,14 +13,32 @@ class SharecartFileWriter implements Closeable {
 
     private PrintWriter writer;
 
+    /**
+     * Constructor.
+     *
+     * @param path path to the file that should be written to.
+     * @throws FileNotFoundException
+     */
     public SharecartFileWriter(String path) throws FileNotFoundException {
         this(new File(path));
     }
 
-    public SharecartFileWriter(File sharecart) throws FileNotFoundException {
-        this.writer = new PrintWriter(sharecart);
+    /**
+     * Constructor.
+     *
+     * @param file the file that should be written to.
+     * @throws FileNotFoundException
+     */
+    public SharecartFileWriter(File file) throws FileNotFoundException {
+        this.writer = new PrintWriter(file);
     }
 
+    /**
+     * Writes the contents of the Sharecart to file.
+     *
+     * @param sharecart container for the Sharecart file contents. All of the parameters in this object will be
+     *                  committed to the file.
+     */
     public void write(Sharecart sharecart) {
         StringBuilder file = new StringBuilder(SharecartFileConstants.TITLE);
         file.append(SharecartFileConstants.DELIMITER_PARAMETER);

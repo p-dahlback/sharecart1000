@@ -10,6 +10,9 @@ class SharecartFileUtils {
 	private static String RUNNING_DIR = null;
 	private static String APP_DIR = null;
 
+	/**
+	 * @return The absolute path to the running directory.
+	 */
 	public static String getRunningLocation() {
 		if(RUNNING_DIR == null) {
 			RUNNING_DIR = new File("").getAbsolutePath();
@@ -17,11 +20,14 @@ class SharecartFileUtils {
 		return RUNNING_DIR;
 	}
 
-	public static String getAppLocation() {
+	/**
+	 * @return The absolute path to the application package.
+	 */
+	public static String getApplicationLocation() {
 		if(APP_DIR == null) {
 			String dir = null;
 			try {
-				dir = System.getProperty("sharecart.dir");
+				dir = System.getProperty("application.dir");
 			} catch(SecurityException e) {
 				e.printStackTrace();
 			}
@@ -35,19 +41,43 @@ class SharecartFileUtils {
 		return APP_DIR;
 	}
 
+	/**
+	 * Gets a file relative to the running directory
+	 * @param filePath the relative path to the file
+	 * @return A new File instance for the provided path. Check {@link File#exists()} to see if a file
+	 * actually exists at that location.
+	 */
 	public static File fileFromRunningLocation(String filePath) {
 		return new File(SharecartFileUtils.getRunningLocation(), filePath);
 	}
 
+	/**
+	 * Gets a file relative to the running directory, traversing the file tree upwards the given number of levels.
+	 * @param levels the number of levels to traverse upwards before appending the file path
+	 * @param filePath the relative path to the file
+	 * @return A new File instance for the provided path. Check {@link File#exists()} to see if a file
+	 * actually exists at that location.
+	 * @see #getRunningLocation()
+	 * @see #fileAboveLocation(int, String, String)
+	 */
 	public static File fileAboveRunningLocation(int levels, String filePath) {
 		return SharecartFileUtils.fileAboveLocation(levels, SharecartFileUtils.getRunningLocation(), filePath);
 	}
 
-	public static File fileAboveLocation(int levels, String location, String filePath) {
+	/**
+	 * Gets a file relative to the given location, traversing the file tree upwards the given number of levels.
+	 * @param levels the number of levels to traverse upwards before appending the file path
+	 * @param directory absolute path to the directory to use as a relative point
+	 * @param filePath the relative path to the file
+	 * @return A new File instance for the provided path. Check {@link File#exists()} to see if a file
+	 * actually exists at that location.
+	 * @see #fileAboveRunningLocation(int, String)
+	 */
+	public static File fileAboveLocation(int levels, String directory, String filePath) {
 		StringBuilder file = new StringBuilder(filePath);
 		for(int i = 0; i < levels; i++) {
 			file.insert(0, "../");
 		}
-		return new File(location, file.toString());
+		return new File(directory, file.toString());
 	}
 }

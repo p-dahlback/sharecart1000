@@ -4,7 +4,7 @@ package io.itch.frogcheese.sharecart.error;
  * Describes when a parameter could not be modified because the new value
  * was invalid.
  */
-public class InvalidParameterException extends IllegalArgumentException {
+public class InvalidParameterException extends SharecartException {
 
     /**
      *

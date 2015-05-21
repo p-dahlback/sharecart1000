@@ -2,6 +2,7 @@ package io.itch.frogcheese.sharecart;
 
 import io.itch.frogcheese.sharecart.error.InvalidParameterException;
 import io.itch.frogcheese.sharecart.error.ParameterNotAccessibleException;
+import io.itch.frogcheese.sharecart.error.SharecartException;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -30,7 +31,7 @@ public class SharecartManager {
     /**
      * Initializes the manager with the given configuration.
      *
-     * @param config
+     * @param config configuration for how the sharecart file should be handled.
      */
     public static void initialize(SharecartConfig config) {
         INSTANCE = new SharecartManager(config);
@@ -117,35 +118,39 @@ public class SharecartManager {
      *
      * @return {@code true} if the contents of the file was successfully loaded. {@code false} otherwise.
      * @throws IllegalStateException if {@link #isValidCart()} hasn't been successfully called
+     * @throws SharecartException    if an unhandled error occurs when reading the sharecart. This will only be thrown if
+     *                               {@link SharecartConfig#isStrictFileMode()} is false.
      */
     public boolean load() {
         if (!this.valid)
-            throw new IllegalStateException(
-                    "Cannot load file before isValidCart() has been called.");
+            throw new IllegalStateException("Cannot load file before isValidCart() has been called.");
 
         try {
             SharecartFileReader reader = new SharecartFileReader(this.shareCartFile);
+            reader.setIsStrict(config.isStrictFileMode());
             this.sharecart = reader.read();
             reader.close();
 
             return this.loaded = true;
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            this.valid = false;
-            this.loaded = false;
-            this.sharecart = null;
-            return false;
+
         } catch (IOException e) {
             e.printStackTrace();
             this.valid = false;
             this.loaded = false;
             this.sharecart = null;
+            if (config.isStrictFileMode())
+                throw new SharecartException(e);
             return false;
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-            this.loaded = true;
-            this.sharecart = Sharecart.withDefaults();
-            save();
+
+        } catch (SharecartException e) {
+            if (config.isStrictFileMode()) {
+                throw e;
+            } else {
+                e.printStackTrace();
+                this.loaded = true;
+                this.sharecart = Sharecart.withDefaults();
+                save();
+            }
             return true;
         }
     }

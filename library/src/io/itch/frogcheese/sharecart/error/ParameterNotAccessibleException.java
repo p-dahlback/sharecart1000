@@ -4,7 +4,7 @@ package io.itch.frogcheese.sharecart.error;
  * Describes when a parameter could not be accessed because of an invalid
  * sharecart state.
  */
-public class ParameterNotAccessibleException extends IllegalStateException {
+public class ParameterNotAccessibleException extends SharecartException {
 
 	/**
 	 *
