@@ -3,7 +3,7 @@ package io.itch.frogcheese.sharecart.error;
 import java.util.Locale;
 
 /**
- * Created by Peter on 15-05-21.
+ * Describes when a sharecart file cannot be parsed because of format issues.
  */
 public class SharecartFormatException extends SharecartException {
 

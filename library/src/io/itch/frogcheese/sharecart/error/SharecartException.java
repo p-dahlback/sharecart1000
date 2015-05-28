@@ -1,7 +1,8 @@
 package io.itch.frogcheese.sharecart.error;
 
 /**
- * Created by Peter on 15-05-21.
+ * A general exception for the sharecart library. All thrown exceptions by the library extend
+ * this class.
  */
 public class SharecartException extends RuntimeException {
 

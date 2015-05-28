@@ -17,14 +17,6 @@ public class InvalidParameterException extends SharecartException {
         this(parameter, String.valueOf(value));
     }
 
-    public InvalidParameterException(String parameter, boolean value) {
-        this(parameter, String.valueOf(value));
-    }
-
-    public InvalidParameterException(String parameter, short value) {
-        this(parameter, String.valueOf(value));
-    }
-
     public InvalidParameterException(String parameter, String value) {
         super(String.format(Locale.US, "'%s' is not a valid value for parameter '%s'", value, parameter));
     }

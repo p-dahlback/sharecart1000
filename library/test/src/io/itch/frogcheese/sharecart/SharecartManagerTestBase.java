@@ -3,6 +3,7 @@ package io.itch.frogcheese.sharecart;
 
 import io.itch.frogcheese.sharecart._test.Constants;
 import io.itch.frogcheese.sharecart.error.ParameterNotAccessibleException;
+import io.itch.frogcheese.sharecart.error.ParameterNotAccessibleExceptionTest;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
