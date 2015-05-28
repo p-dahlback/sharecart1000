@@ -19,10 +19,13 @@ class SharecartFile {
     }
 
     private SharecartFile(File file) {
-        this.file = file;
+        this(file, false);
     }
 
     private SharecartFile(File file, boolean autoCreated) {
+        if (file == null)
+            throw new IllegalArgumentException("Cannot pass null as a file.");
+
         this.file = file;
         this.autoCreated = autoCreated;
     }
@@ -37,5 +40,21 @@ class SharecartFile {
 
     public boolean isAutoCreated() {
         return this.autoCreated;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        SharecartFile that = (SharecartFile) o;
+
+        return file.equals(that.file);
+
+    }
+
+    @Override
+    public int hashCode() {
+        return file.hashCode();
     }
 }

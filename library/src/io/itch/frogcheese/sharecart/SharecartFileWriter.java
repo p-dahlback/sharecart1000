@@ -1,10 +1,6 @@
 package io.itch.frogcheese.sharecart;
 
-import java.io.Closeable;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 
 import static io.itch.frogcheese.sharecart.SharecartFileConstants.*;
 
@@ -18,20 +14,17 @@ class SharecartFileWriter implements Closeable {
     /**
      * Constructor.
      *
-     * @param path path to the file that should be written to.
-     * @throws FileNotFoundException
-     */
-    public SharecartFileWriter(String path) throws FileNotFoundException {
-        this(new File(path));
-    }
-
-    /**
-     * Constructor.
-     *
      * @param file the file that should be written to.
      * @throws FileNotFoundException
      */
     public SharecartFileWriter(File file) throws FileNotFoundException {
+        if (file == null)
+            throw new IllegalArgumentException("File cannot be null");
+        if (!file.exists() || !file.isFile())
+            // This manual FileNotFoundException is here because
+            // PrintWriter creates the file instead of throwing an exception.
+            throw new FileNotFoundException(file.getAbsolutePath() + " could not be found");
+
         this.writer = new PrintWriter(file);
     }
 

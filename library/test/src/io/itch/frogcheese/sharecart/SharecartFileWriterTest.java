@@ -1,5 +1,6 @@
 package io.itch.frogcheese.sharecart;
 
+import io.itch.frogcheese.sharecart._test.Constants;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.After;
 import org.junit.Before;
@@ -14,6 +15,7 @@ import java.util.Locale;
 import static io.itch.frogcheese.sharecart.SharecartFileConstants.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
+import static org.assertj.core.api.Assertions.failBecauseExceptionWasNotThrown;
 
 public class SharecartFileWriterTest {
 
@@ -31,6 +33,7 @@ public class SharecartFileWriterTest {
     };
 
     private File tempFile;
+    private File invalidFile;
     private SharecartFileWriter writer;
     private BufferedReader fileReader;
 
@@ -41,6 +44,7 @@ public class SharecartFileWriterTest {
     @Before
     public void setUp() throws Exception {
         tempFile = File.createTempFile(TEMP_FILE_NAME, null);
+        invalidFile = new File(Constants.TEST_RESOURCES_PATH, "invalidFile");
         writer = new SharecartFileWriter(tempFile);
 
         defaultCart = Sharecart.withDefaults();
@@ -86,6 +90,26 @@ public class SharecartFileWriterTest {
 
         for (int i = 0; i < SWITCH_VALUES.length; i++) {
             assertThat(miscCart.switchValue(i)).isEqualTo(SWITCH_VALUES[i]);
+        }
+    }
+
+    @Test
+    public void testConstruct_rejects_null() throws Exception {
+        try {
+            new SharecartFileWriter((File) null);
+            failBecauseExceptionWasNotThrown(IllegalArgumentException.class);
+        } catch (IllegalArgumentException ignored) {
+
+        }
+    }
+
+    @Test
+    public void testConstruct_with_invalid_file_throws_exception() throws Exception {
+        try {
+            new SharecartFileWriter(invalidFile);
+            failBecauseExceptionWasNotThrown(FileNotFoundException.class);
+        } catch (FileNotFoundException ignored) {
+
         }
     }
 

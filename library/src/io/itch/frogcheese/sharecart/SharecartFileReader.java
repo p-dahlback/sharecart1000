@@ -24,20 +24,13 @@ class SharecartFileReader implements Closeable {
     /**
      * Constructor.
      *
-     * @param path path to the file that should be written to.
-     * @throws FileNotFoundException
-     */
-    public SharecartFileReader(String path) throws FileNotFoundException {
-        this(new File(path));
-    }
-
-    /**
-     * Constructor.
-     *
      * @param file the file that should be written to.
      * @throws FileNotFoundException
      */
     public SharecartFileReader(File file) throws FileNotFoundException {
+        if (file == null)
+            throw new IllegalArgumentException("File cannot be null");
+
         this.scanner = new Scanner(file)
                 .useDelimiter(SharecartFileConstants.DELIMITER_PARAMETER_PATTERN);
         this.scanner.next();

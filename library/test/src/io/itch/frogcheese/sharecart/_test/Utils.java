@@ -1,5 +1,7 @@
 package io.itch.frogcheese.sharecart._test;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 public class Utils {
 
     private Utils() {
@@ -11,6 +13,9 @@ public class Utils {
         do {
             sb.append(fillerCharacter);
         } while (sb.length() < length);
+
+        assertThat(sb.toString()).hasSize(length);
+        
         return sb;
     }
 }

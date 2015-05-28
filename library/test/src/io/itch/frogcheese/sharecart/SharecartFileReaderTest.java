@@ -7,6 +7,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.failBecauseExceptionWasNotThrown;
@@ -20,6 +21,7 @@ public class SharecartFileReaderTest {
     private File constraintFailureFile;
     private File invalidParamDefinitionFile;
     private File invalidParamNameFile;
+    private File invalidFile;
     private SharecartFileReader reader;
 
     @Before
@@ -29,6 +31,7 @@ public class SharecartFileReaderTest {
         constraintFailureFile = new File(TEST_RESOURCES_PATH, "sharecart_constraint_failure.ini");
         invalidParamDefinitionFile = new File(TEST_RESOURCES_PATH, "sharecart_invalid_parameter_definition.ini");
         invalidParamNameFile = new File(TEST_RESOURCES_PATH, "sharecart_invalid_parameter_name.ini");
+        invalidFile = new File(TEST_RESOURCES_PATH, "invalidFile");
     }
 
     @After
@@ -45,6 +48,26 @@ public class SharecartFileReaderTest {
         assertThat(constraintFailureFile).isFile();
         assertThat(invalidParamDefinitionFile).isFile();
         assertThat(invalidParamNameFile).isFile();
+    }
+
+    @Test
+    public void testConstruct_rejects_null() throws Exception {
+        try {
+            new SharecartFileReader((File) null);
+            failBecauseExceptionWasNotThrown(IllegalArgumentException.class);
+        } catch (IllegalArgumentException ignored) {
+
+        }
+    }
+
+    @Test
+    public void testConstruct_with_invalid_file_throws_exception() throws Exception {
+        try {
+            new SharecartFileReader(invalidFile);
+            failBecauseExceptionWasNotThrown(FileNotFoundException.class);
+        } catch (FileNotFoundException ignored) {
+
+        }
     }
 
     @Test

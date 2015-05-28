@@ -87,6 +87,7 @@ public class SharecartManager {
             this.sharecart = Sharecart.withDefaults();
             save();
 
+            // Clear auto created flag since the file has been properly initialized now
             shareCartFile.setIsAutoCreated(false);
             return true;
         }
