@@ -1,6 +1,6 @@
 package io.itch.frogcheese.sharecart;
 
-import io.itch.frogcheese.sharecart.error.SharecartFormatException;
+import io.itch.frogcheese.sharecart.error.ShareCartFormatException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -14,7 +14,7 @@ import java.util.Scanner;
 /**
  * Handles reading from a sharecart file.
  */
-class SharecartFileReader implements Closeable {
+class ShareCartFileReader implements Closeable {
 
     private static final String VALUE_TYPE_BOOLEAN = "boolean";
     private static final String VALUE_TYPE_INTEGER = "integer";
@@ -35,13 +35,13 @@ class SharecartFileReader implements Closeable {
      * @param file the file that should be written to.
      * @throws FileNotFoundException
      */
-    public SharecartFileReader(File file) throws FileNotFoundException {
+    public ShareCartFileReader(File file) throws FileNotFoundException {
         if (file == null)
             throw new IllegalArgumentException("File cannot be null");
 
         path = file.getPath();
         scanner = new Scanner(file)
-                .useDelimiter(SharecartFileConstants.DELIMITER_PARAMETER_PATTERN);
+                .useDelimiter(ShareCartFileConstants.DELIMITER_PARAMETER_PATTERN);
     }
 
     /**
@@ -63,45 +63,45 @@ class SharecartFileReader implements Closeable {
     }
 
     /**
-     * Reads the contents of the file into a Sharecart object.
+     * Reads the contents of the file into a ShareCart object.
      *
-     * @return A new Sharecart containing the parameters of the file.
+     * @return A new ShareCart containing the parameters of the file.
      */
-    public Sharecart read() {
-        Sharecart ret = Sharecart.withDefaults();
+    public ShareCart read() {
+        ShareCart ret = ShareCart.withDefaults();
 
         try {
             // Skip title
             scanner.next();
             currentLine++;
 
-            int x = readInt(SharecartFileConstants.PARAMETER_X);
+            int x = readInt(ShareCartFileConstants.PARAMETER_X);
             ret.x(validateX(x));
             currentLine++;
 
-            int y = readInt(SharecartFileConstants.PARAMETER_Y);
+            int y = readInt(ShareCartFileConstants.PARAMETER_Y);
             ret.y(validateY(y));
             currentLine++;
 
-            for (int i = 0; i < SharecartFileConstants.PARAMETER_MISC.length; i++) {
-                int misc = readInt(SharecartFileConstants.PARAMETER_MISC[i]);
+            for (int i = 0; i < ShareCartFileConstants.PARAMETER_MISC.length; i++) {
+                int misc = readInt(ShareCartFileConstants.PARAMETER_MISC[i]);
                 ret.misc(i, validateMisc(i, misc));
                 currentLine++;
             }
 
-            String name = readString(SharecartFileConstants.PARAMETER_NAME);
+            String name = readString(ShareCartFileConstants.PARAMETER_NAME);
             ret.name(validateName(name));
             currentLine++;
 
-            for (int i = 0; i < SharecartFileConstants.PARAMETER_SWITCH.length; i++) {
-                ret.switchValue(i, readBoolean(SharecartFileConstants.PARAMETER_SWITCH[i]));
+            for (int i = 0; i < ShareCartFileConstants.PARAMETER_SWITCH.length; i++) {
+                ret.switchValue(i, readBoolean(ShareCartFileConstants.PARAMETER_SWITCH[i]));
                 currentLine++;
             }
             checkConstraints(ret);
 
         } catch (NoSuchElementException e) {
             if (isStrict()) {
-                throw new SharecartFormatException("File '%s', line %d: Encountered end of file prematurely",
+                throw new ShareCartFormatException("File '%s', line %d: Encountered end of file prematurely",
                         path, currentLine);
             }
         }
@@ -111,7 +111,7 @@ class SharecartFileReader implements Closeable {
     private int validateX(int x) {
         if (!Constraints.validX(x)) {
             if (isStrict())
-                throwConstraintException(SharecartFileConstants.PARAMETER_X, x);
+                throwConstraintException(ShareCartFileConstants.PARAMETER_X, x);
             return Constraints.clampX(x);
         }
         return x;
@@ -120,7 +120,7 @@ class SharecartFileReader implements Closeable {
     private int validateY(int y) {
         if (!Constraints.validY(y)) {
             if (isStrict())
-                throwConstraintException(SharecartFileConstants.PARAMETER_Y, y);
+                throwConstraintException(ShareCartFileConstants.PARAMETER_Y, y);
             return Constraints.clampY(y);
         }
         return y;
@@ -129,7 +129,7 @@ class SharecartFileReader implements Closeable {
     private int validateMisc(int index, int misc) {
         if (!Constraints.validMisc(misc)) {
             if (isStrict())
-                throwConstraintException(SharecartFileConstants.PARAMETER_MISC[index], misc);
+                throwConstraintException(ShareCartFileConstants.PARAMETER_MISC[index], misc);
             return Constraints.clampMisc(misc);
         }
         return misc;
@@ -138,31 +138,31 @@ class SharecartFileReader implements Closeable {
     private String validateName(String name) {
         if (!Constraints.validName(name)) {
             if (isStrict())
-                throwConstraintException(SharecartFileConstants.PARAMETER_NAME, name);
+                throwConstraintException(ShareCartFileConstants.PARAMETER_NAME, name);
             return Constraints.clampName(name);
         }
         return name;
     }
 
-    private void checkConstraints(Sharecart sharecart) {
+    private void checkConstraints(ShareCart shareCart) {
 
-        int y = sharecart.y();
+        int y = shareCart.y();
 
 
-        for (int i = 0; i < SharecartFileConstants.PARAMETER_MISC.length; i++) {
-            int misc = sharecart.misc(i);
+        for (int i = 0; i < ShareCartFileConstants.PARAMETER_MISC.length; i++) {
+            int misc = shareCart.misc(i);
             if (!Constraints.validMisc(misc)) {
                 if (isStrict())
-                    throwConstraintException(SharecartFileConstants.PARAMETER_MISC[i], misc);
-                sharecart.misc(i, Constraints.clampMisc(misc));
+                    throwConstraintException(ShareCartFileConstants.PARAMETER_MISC[i], misc);
+                shareCart.misc(i, Constraints.clampMisc(misc));
             }
         }
 
-        String name = sharecart.name();
+        String name = shareCart.name();
         if (!Constraints.validName(name)) {
             if (isStrict())
-                throwConstraintException(SharecartFileConstants.PARAMETER_NAME, name);
-            sharecart.name(Constraints.clampName(name));
+                throwConstraintException(ShareCartFileConstants.PARAMETER_NAME, name);
+            shareCart.name(Constraints.clampName(name));
         }
     }
 
@@ -186,7 +186,7 @@ class SharecartFileReader implements Closeable {
 
         if (!hasKey(keyValue, key)) {
             if (isStrict())
-                throw new SharecartFormatException("File '%s', line %d: Found '%s' where parameter '%s' was expected",
+                throw new ShareCartFormatException("File '%s', line %d: Found '%s' where parameter '%s' was expected",
                         path, currentLine, keyValue.getKey(), key);
 
             // If this is the second failure for this token, then the token is likely faulty.
@@ -237,13 +237,13 @@ class SharecartFileReader implements Closeable {
     }
 
     private Pair<String, String> getKeyValuePair(String token) {
-        int firstIndex = token.indexOf(SharecartFileConstants.DELIMITER_VALUE);
+        int firstIndex = token.indexOf(ShareCartFileConstants.DELIMITER_VALUE);
         if (firstIndex < token.length() - 1 && firstIndex > 0) {
             String left = token.substring(0, firstIndex);
             String right = token.substring(firstIndex + 1);
             return Pair.of(left, right);
         } else if (isStrict()) {
-            throw new SharecartFormatException("File '%s', line %d: '%s' is not a valid parameter definition",
+            throw new ShareCartFormatException("File '%s', line %d: '%s' is not a valid parameter definition",
                     path, currentLine, token);
         }
         return null;
@@ -255,13 +255,13 @@ class SharecartFileReader implements Closeable {
         return key.equalsIgnoreCase(keyValue.getKey());
     }
 
-    private void throwInvalidValueFormatException(String value, String valueType) throws SharecartFormatException {
-        throw new SharecartFormatException("File '%s', line %d: The string '%s' is not a valid %s",
+    private void throwInvalidValueFormatException(String value, String valueType) throws ShareCartFormatException {
+        throw new ShareCartFormatException("File '%s', line %d: The string '%s' is not a valid %s",
                 path, currentLine, value, valueType);
     }
 
-    private void throwConstraintException(String parameterName, Object value) throws SharecartFormatException {
-        throw new SharecartFormatException("File '%s', line %d: The %s value '%s' does not fulfill " +
+    private void throwConstraintException(String parameterName, Object value) throws ShareCartFormatException {
+        throw new ShareCartFormatException("File '%s', line %d: The %s value '%s' does not fulfill " +
                 "the constraints of the parameter",
                 path, currentLine, parameterName, value.toString());
     }

@@ -4,20 +4,20 @@ package io.itch.frogcheese.sharecart.error;
  * A general exception for the sharecart library. All thrown exceptions by the library extend
  * this class.
  */
-public class SharecartException extends RuntimeException {
+public class ShareCartException extends RuntimeException {
 
-    public SharecartException() {
+    public ShareCartException() {
     }
 
-    public SharecartException(String s) {
+    public ShareCartException(String s) {
         super(s);
     }
 
-    public SharecartException(String s, Throwable throwable) {
+    public ShareCartException(String s, Throwable throwable) {
         super(s, throwable);
     }
 
-    public SharecartException(Throwable throwable) {
+    public ShareCartException(Throwable throwable) {
         super(throwable);
     }
 

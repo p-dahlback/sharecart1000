@@ -12,12 +12,12 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.Locale;
 
-import static io.itch.frogcheese.sharecart.SharecartFileConstants.*;
+import static io.itch.frogcheese.sharecart.ShareCartFileConstants.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
 import static org.assertj.core.api.Assertions.failBecauseExceptionWasNotThrown;
 
-public class SharecartFileWriterTest {
+public class ShareCartFileWriterTest {
 
     private static final String TEMP_FILE_NAME = "sharecart_writer_test";
     private static final int EXPECTED_LINE_COUNT = 16;
@@ -34,22 +34,22 @@ public class SharecartFileWriterTest {
 
     private File tempFile;
     private File invalidFile;
-    private SharecartFileWriter writer;
+    private ShareCartFileWriter writer;
     private BufferedReader fileReader;
 
     // Carts
-    private Sharecart defaultCart;
-    private Sharecart miscCart;
+    private ShareCart defaultCart;
+    private ShareCart miscCart;
 
     @Before
     public void setUp() throws Exception {
         tempFile = File.createTempFile(TEMP_FILE_NAME, null);
         invalidFile = new File(Constants.TEST_RESOURCES_PATH, "invalidFile");
-        writer = new SharecartFileWriter(tempFile);
+        writer = new ShareCartFileWriter(tempFile);
 
-        defaultCart = Sharecart.withDefaults();
+        defaultCart = ShareCart.withDefaults();
 
-        miscCart = new Sharecart();
+        miscCart = new ShareCart();
         miscCart.x(X_VALUE);
         miscCart.y(Y_VALUE);
         for (int i = 0; i < MISC_VALUES.length; i++) {
@@ -78,7 +78,7 @@ public class SharecartFileWriterTest {
         assertThat(tempFile).isFile();
         assertThat(writer).isNotNull();
 
-        assertThat(defaultCart).isEqualTo(Sharecart.withDefaults());
+        assertThat(defaultCart).isEqualTo(ShareCart.withDefaults());
         assertThat(miscCart.x()).isEqualTo(X_VALUE);
         assertThat(miscCart.y()).isEqualTo(Y_VALUE);
 
@@ -96,7 +96,7 @@ public class SharecartFileWriterTest {
     @Test
     public void testConstruct_rejects_null() throws Exception {
         try {
-            new SharecartFileWriter(null);
+            new ShareCartFileWriter(null);
             failBecauseExceptionWasNotThrown(IllegalArgumentException.class);
         } catch (IllegalArgumentException ignored) {
 
@@ -106,7 +106,7 @@ public class SharecartFileWriterTest {
     @Test
     public void testConstruct_with_invalid_file_throws_exception() throws Exception {
         try {
-            new SharecartFileWriter(invalidFile);
+            new ShareCartFileWriter(invalidFile);
             failBecauseExceptionWasNotThrown(FileNotFoundException.class);
         } catch (FileNotFoundException ignored) {
 
@@ -144,7 +144,7 @@ public class SharecartFileWriterTest {
             assertNextLineEquals(miscParameter, "0");
         }
 
-        assertNextLineEquals(PARAMETER_NAME, Sharecart.DEFAULT_NAME);
+        assertNextLineEquals(PARAMETER_NAME, ShareCart.DEFAULT_NAME);
 
         for (String switchParameter : PARAMETER_SWITCH) {
             assertNextLineEquals(switchParameter, "FALSE");
@@ -177,9 +177,9 @@ public class SharecartFileWriterTest {
         writer.write(miscCart);
         writer.close();
 
-        SharecartFileReader reader = new SharecartFileReader(tempFile);
+        ShareCartFileReader reader = new ShareCartFileReader(tempFile);
         reader.setIsStrict(true);
-        Sharecart cart = reader.read();
+        ShareCart cart = reader.read();
         reader.close();
 
         assertThat(cart).isEqualTo(miscCart);

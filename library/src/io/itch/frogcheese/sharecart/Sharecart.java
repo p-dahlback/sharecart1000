@@ -5,7 +5,7 @@ import java.util.Arrays;
 /**
  * Wrapper around the sharecart parameters.
  */
-class Sharecart {
+class ShareCart {
     static final String DEFAULT_NAME = "CHANGEME";
 
     private int x;
@@ -15,18 +15,18 @@ class Sharecart {
     private boolean[] switches = new boolean[Constraints.SWITCH_ITEMS_LENGTH];
 
 
-    public static Sharecart withDefaults() {
-        Sharecart sharecart = new Sharecart();
-        sharecart.x(0);
-        sharecart.y(0);
+    public static ShareCart withDefaults() {
+        ShareCart shareCart = new ShareCart();
+        shareCart.x(0);
+        shareCart.y(0);
         for (int i = 0; i < Constraints.MISC_ITEMS_LENGTH; i++) {
-            sharecart.misc(i, 0);
+            shareCart.misc(i, 0);
         }
-        sharecart.name(DEFAULT_NAME);
+        shareCart.name(DEFAULT_NAME);
         for (int i = 0; i < Constraints.SWITCH_ITEMS_LENGTH; i++) {
-            sharecart.switchValue(i, false);
+            shareCart.switchValue(i, false);
         }
-        return sharecart;
+        return shareCart;
     }
 
     public int x() {
@@ -82,13 +82,13 @@ class Sharecart {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Sharecart sharecart = (Sharecart) o;
+        ShareCart shareCart = (ShareCart) o;
 
-        return x == sharecart.x
-                && y == sharecart.y
-                && Arrays.equals(misc, sharecart.misc)
-                && name.equals(sharecart.name)
-                && Arrays.equals(switches, sharecart.switches);
+        return x == shareCart.x
+                && y == shareCart.y
+                && Arrays.equals(misc, shareCart.misc)
+                && name.equals(shareCart.name)
+                && Arrays.equals(switches, shareCart.switches);
     }
 
     @Override

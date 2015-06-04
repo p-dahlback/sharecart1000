@@ -2,12 +2,12 @@ package io.itch.frogcheese.sharecart;
 
 import java.io.*;
 
-import static io.itch.frogcheese.sharecart.SharecartFileConstants.*;
+import static io.itch.frogcheese.sharecart.ShareCartFileConstants.*;
 
 /**
  * Handles writing to a sharecart file.
  */
-class SharecartFileWriter implements Closeable {
+class ShareCartFileWriter implements Closeable {
 
     private PrintWriter writer;
 
@@ -17,7 +17,7 @@ class SharecartFileWriter implements Closeable {
      * @param file the file that should be written to.
      * @throws FileNotFoundException
      */
-    public SharecartFileWriter(File file) throws FileNotFoundException {
+    public ShareCartFileWriter(File file) throws FileNotFoundException {
         if (file == null)
             throw new IllegalArgumentException("File cannot be null");
         if (!file.exists() || !file.isFile())
@@ -29,12 +29,12 @@ class SharecartFileWriter implements Closeable {
     }
 
     /**
-     * Writes the contents of the Sharecart to file.
+     * Writes the contents of the ShareCart to file.
      *
-     * @param sharecart container for the Sharecart file contents. All of the parameters in this object will be
+     * @param shareCart container for the ShareCart file contents. All of the parameters in this object will be
      *                  committed to the file.
      */
-    public void write(Sharecart sharecart) {
+    public void write(ShareCart shareCart) {
 
         StringBuilder file = new StringBuilder(TITLE);
 
@@ -42,33 +42,33 @@ class SharecartFileWriter implements Closeable {
 
         file.append(PARAMETER_X)
                 .append(DELIMITER_VALUE)
-                .append(intString(sharecart.x()));
+                .append(intString(shareCart.x()));
 
         file.append(DELIMITER_PARAMETER);
 
         file.append(PARAMETER_Y)
                 .append(DELIMITER_VALUE)
-                .append(intString(sharecart.y()));
+                .append(intString(shareCart.y()));
 
         file.append(DELIMITER_PARAMETER);
 
         for (int i = 0; i < PARAMETER_MISC.length; i++) {
             file.append(PARAMETER_MISC[i])
                     .append(DELIMITER_VALUE)
-                    .append(intString(sharecart.misc(i)));
+                    .append(intString(shareCart.misc(i)));
 
             file.append(DELIMITER_PARAMETER);
         }
         file.append(PARAMETER_NAME)
                 .append(DELIMITER_VALUE)
-                .append(sharecart.name());
+                .append(shareCart.name());
 
         file.append(DELIMITER_PARAMETER);
 
         for (int i = 0; i < PARAMETER_SWITCH.length; i++) {
             file.append(PARAMETER_SWITCH[i])
                     .append(DELIMITER_VALUE)
-                    .append(booleanString(sharecart.switchValue(i)));
+                    .append(booleanString(shareCart.switchValue(i)));
 
             file.append(DELIMITER_PARAMETER);
         }

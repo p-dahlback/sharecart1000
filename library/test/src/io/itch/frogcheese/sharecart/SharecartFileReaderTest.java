@@ -1,7 +1,7 @@
 package io.itch.frogcheese.sharecart;
 
 import io.itch.frogcheese.sharecart._test.Constants;
-import io.itch.frogcheese.sharecart.error.SharecartFormatException;
+import io.itch.frogcheese.sharecart.error.ShareCartFormatException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -12,7 +12,7 @@ import java.io.FileNotFoundException;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.failBecauseExceptionWasNotThrown;
 
-public class SharecartFileReaderTest {
+public class ShareCartFileReaderTest {
 
     private static final String TEST_RESOURCES_PATH = Constants.TEST_RESOURCES_PATH;
 
@@ -24,7 +24,7 @@ public class SharecartFileReaderTest {
     private File emptyFile;
     private File partialFile;
     private File invalidFile;
-    private SharecartFileReader reader;
+    private ShareCartFileReader reader;
 
     @Before
     public void setUp() throws Exception {
@@ -57,7 +57,7 @@ public class SharecartFileReaderTest {
     @Test
     public void testConstruct_rejects_null() throws Exception {
         try {
-            new SharecartFileReader(null);
+            new ShareCartFileReader(null);
             failBecauseExceptionWasNotThrown(IllegalArgumentException.class);
         } catch (IllegalArgumentException ignored) {
 
@@ -67,7 +67,7 @@ public class SharecartFileReaderTest {
     @Test
     public void testConstruct_with_invalid_file_throws_exception() throws Exception {
         try {
-            new SharecartFileReader(invalidFile);
+            new ShareCartFileReader(invalidFile);
             failBecauseExceptionWasNotThrown(FileNotFoundException.class);
         } catch (FileNotFoundException ignored) {
 
@@ -76,46 +76,46 @@ public class SharecartFileReaderTest {
 
     @Test
     public void testReader_initial_state() throws Exception {
-        SharecartFileReader reader = new SharecartFileReader(correctFile);
+        ShareCartFileReader reader = new ShareCartFileReader(correctFile);
         assertThat(reader.isStrict()).isFalse();
     }
 
     @Test
     public void testRead_correct_file() throws Exception {
-        SharecartFileReader reader = new SharecartFileReader(correctFile);
+        ShareCartFileReader reader = new ShareCartFileReader(correctFile);
         reader.setIsStrict(false);
 
-        Sharecart sharecart = reader.read();
-        assertCorrectFileMatchesParameters(sharecart);
+        ShareCart shareCart = reader.read();
+        assertCorrectFileMatchesParameters(shareCart);
     }
 
     @Test
     public void testRead_correct_file_strict() throws Exception {
-        SharecartFileReader reader = new SharecartFileReader(correctFile);
+        ShareCartFileReader reader = new ShareCartFileReader(correctFile);
         reader.setIsStrict(true);
 
-        Sharecart sharecart = reader.read();
-        assertCorrectFileMatchesParameters(sharecart);
+        ShareCart shareCart = reader.read();
+        assertCorrectFileMatchesParameters(shareCart);
     }
 
     @Test
     public void testRead_missing_param_file() throws Exception {
-        SharecartFileReader reader = new SharecartFileReader(missingParameterFile);
+        ShareCartFileReader reader = new ShareCartFileReader(missingParameterFile);
         reader.setIsStrict(false);
 
-        Sharecart sharecart = reader.read();
-        assertMissingParamFileMatchesParameters(sharecart);
+        ShareCart shareCart = reader.read();
+        assertMissingParamFileMatchesParameters(shareCart);
     }
 
     @Test
     public void testRead_missing_param_file_strict() throws Exception {
-        SharecartFileReader reader = new SharecartFileReader(missingParameterFile);
+        ShareCartFileReader reader = new ShareCartFileReader(missingParameterFile);
         reader.setIsStrict(true);
 
         try {
             reader.read();
-            failBecauseExceptionWasNotThrown(SharecartFormatException.class);
-        } catch (SharecartFormatException e) {
+            failBecauseExceptionWasNotThrown(ShareCartFormatException.class);
+        } catch (ShareCartFormatException e) {
             assertThat(e).hasMessage("File 'test/resources/sharecart_missing_parameter.ini', line 5: " +
                     "Found 'Misc3' where parameter 'Misc2' was expected");
         }
@@ -123,22 +123,22 @@ public class SharecartFileReaderTest {
 
     @Test
     public void testRead_constraint_failure_file() throws Exception {
-        SharecartFileReader reader = new SharecartFileReader(constraintFailureFile);
+        ShareCartFileReader reader = new ShareCartFileReader(constraintFailureFile);
         reader.setIsStrict(false);
 
-        Sharecart sharecart = reader.read();
-        assertConstraintFailureFileMatchesParameters(sharecart);
+        ShareCart shareCart = reader.read();
+        assertConstraintFailureFileMatchesParameters(shareCart);
     }
 
     @Test
     public void testRead_constraint_failure_file_strict() throws Exception {
-        SharecartFileReader reader = new SharecartFileReader(constraintFailureFile);
+        ShareCartFileReader reader = new ShareCartFileReader(constraintFailureFile);
         reader.setIsStrict(true);
 
         try {
             reader.read();
-            failBecauseExceptionWasNotThrown(SharecartFormatException.class);
-        } catch (SharecartFormatException e) {
+            failBecauseExceptionWasNotThrown(ShareCartFormatException.class);
+        } catch (ShareCartFormatException e) {
             assertThat(e).hasMessage("File 'test/resources/sharecart_constraint_failure.ini', line 2: " +
                     "The MapY value '550000' does not fulfill the constraints of the parameter");
         }
@@ -146,22 +146,22 @@ public class SharecartFileReaderTest {
 
     @Test
     public void testRead_invalid_param_definition_file() throws Exception {
-        SharecartFileReader reader = new SharecartFileReader(invalidParamDefinitionFile);
+        ShareCartFileReader reader = new ShareCartFileReader(invalidParamDefinitionFile);
         reader.setIsStrict(false);
 
-        Sharecart sharecart = reader.read();
-        assertInvalidParamDefinitionFileMatchesParameters(sharecart);
+        ShareCart shareCart = reader.read();
+        assertInvalidParamDefinitionFileMatchesParameters(shareCart);
     }
 
     @Test
     public void testRead_invalid_param_definition_file_strict() throws Exception {
-        SharecartFileReader reader = new SharecartFileReader(invalidParamDefinitionFile);
+        ShareCartFileReader reader = new ShareCartFileReader(invalidParamDefinitionFile);
         reader.setIsStrict(true);
 
         try {
             reader.read();
-            failBecauseExceptionWasNotThrown(SharecartFormatException.class);
-        } catch (SharecartFormatException e) {
+            failBecauseExceptionWasNotThrown(ShareCartFormatException.class);
+        } catch (ShareCartFormatException e) {
             assertThat(e).hasMessage("File 'test/resources/sharecart_invalid_parameter_definition.ini', line 3: " +
                     "'Misc038424' is not a valid parameter definition");
         }
@@ -169,22 +169,22 @@ public class SharecartFileReaderTest {
 
     @Test
     public void testRead_invalid_param_name_file() throws Exception {
-        SharecartFileReader reader = new SharecartFileReader(invalidParamNameFile);
+        ShareCartFileReader reader = new ShareCartFileReader(invalidParamNameFile);
         reader.setIsStrict(false);
 
-        Sharecart sharecart = reader.read();
-        assertInvalidParamNameMatchesParameters(sharecart);
+        ShareCart shareCart = reader.read();
+        assertInvalidParamNameMatchesParameters(shareCart);
     }
 
     @Test
     public void testRead_invalid_param_name_file_strict() throws Exception {
-        SharecartFileReader reader = new SharecartFileReader(invalidParamNameFile);
+        ShareCartFileReader reader = new ShareCartFileReader(invalidParamNameFile);
         reader.setIsStrict(true);
 
         try {
             reader.read();
-            failBecauseExceptionWasNotThrown(SharecartFormatException.class);
-        } catch (SharecartFormatException e) {
+            failBecauseExceptionWasNotThrown(ShareCartFormatException.class);
+        } catch (ShareCartFormatException e) {
             assertThat(e).hasMessage("File 'test/resources/sharecart_invalid_parameter_name.ini', line 5: " +
                     "Found 'Misc' where parameter 'Misc2' was expected");
         }
@@ -192,22 +192,22 @@ public class SharecartFileReaderTest {
 
     @Test
     public void testRead_empty_file() throws Exception {
-        SharecartFileReader reader = new SharecartFileReader(emptyFile);
+        ShareCartFileReader reader = new ShareCartFileReader(emptyFile);
         reader.setIsStrict(false);
 
-        Sharecart sharecart = reader.read();
-        assertThat(sharecart).isEqualTo(Sharecart.withDefaults());
+        ShareCart shareCart = reader.read();
+        assertThat(shareCart).isEqualTo(ShareCart.withDefaults());
     }
 
     @Test
     public void testRead_empty_file_strict() throws Exception {
-        SharecartFileReader reader = new SharecartFileReader(emptyFile);
+        ShareCartFileReader reader = new ShareCartFileReader(emptyFile);
         reader.setIsStrict(true);
 
         try {
             reader.read();
-            failBecauseExceptionWasNotThrown(SharecartFormatException.class);
-        } catch (SharecartFormatException e) {
+            failBecauseExceptionWasNotThrown(ShareCartFormatException.class);
+        } catch (ShareCartFormatException e) {
             assertThat(e).hasMessage("File 'test/resources/sharecart_empty.ini', line 0: " +
                     "Encountered end of file prematurely");
         }
@@ -215,135 +215,135 @@ public class SharecartFileReaderTest {
 
     @Test
     public void testRead_partial_file() throws Exception {
-        SharecartFileReader reader = new SharecartFileReader(partialFile);
+        ShareCartFileReader reader = new ShareCartFileReader(partialFile);
         reader.setIsStrict(false);
 
-        Sharecart sharecart = reader.read();
-        assertThat(sharecart.x()).isEqualTo(100);
-        assertThat(sharecart.y()).isEqualTo(1);
-        assertThat(sharecart.misc(0)).isEqualTo(38424);
-        assertThat(sharecart.misc(1)).isZero();
-        assertThat(sharecart.misc(2)).isZero();
-        assertThat(sharecart.misc(3)).isZero();
+        ShareCart shareCart = reader.read();
+        assertThat(shareCart.x()).isEqualTo(100);
+        assertThat(shareCart.y()).isEqualTo(1);
+        assertThat(shareCart.misc(0)).isEqualTo(38424);
+        assertThat(shareCart.misc(1)).isZero();
+        assertThat(shareCart.misc(2)).isZero();
+        assertThat(shareCart.misc(3)).isZero();
 
-        assertThat(sharecart.name()).isEqualTo(Sharecart.DEFAULT_NAME);
+        assertThat(shareCart.name()).isEqualTo(ShareCart.DEFAULT_NAME);
 
         for (int i = 0; i < Constraints.SWITCH_ITEMS_LENGTH; i++) {
-            assertThat(sharecart.switchValue(i)).isFalse();
+            assertThat(shareCart.switchValue(i)).isFalse();
         }
     }
 
     @Test
     public void testRead_partial_file_strict() throws Exception {
-        SharecartFileReader reader = new SharecartFileReader(partialFile);
+        ShareCartFileReader reader = new ShareCartFileReader(partialFile);
         reader.setIsStrict(true);
 
         try {
             reader.read();
-            failBecauseExceptionWasNotThrown(SharecartFormatException.class);
-        } catch (SharecartFormatException e) {
+            failBecauseExceptionWasNotThrown(ShareCartFormatException.class);
+        } catch (ShareCartFormatException e) {
             assertThat(e).hasMessage("File 'test/resources/sharecart_partial.ini', line 4: " +
                     "Encountered end of file prematurely");
         }
     }
 
-    private void assertCorrectFileMatchesParameters(Sharecart sharecart) {
-        assertThat(sharecart.x()).isEqualTo(100);
-        assertThat(sharecart.y()).isEqualTo(1);
-        assertThat(sharecart.misc(0)).isEqualTo(38424);
-        assertThat(sharecart.misc(1)).isEqualTo(61499);
-        assertThat(sharecart.misc(2)).isEqualTo(60753);
-        assertThat(sharecart.misc(3)).isEqualTo(15107);
+    private void assertCorrectFileMatchesParameters(ShareCart shareCart) {
+        assertThat(shareCart.x()).isEqualTo(100);
+        assertThat(shareCart.y()).isEqualTo(1);
+        assertThat(shareCart.misc(0)).isEqualTo(38424);
+        assertThat(shareCart.misc(1)).isEqualTo(61499);
+        assertThat(shareCart.misc(2)).isEqualTo(60753);
+        assertThat(shareCart.misc(3)).isEqualTo(15107);
 
-        assertThat(sharecart.name()).isEqualTo("MY NAME IS HERE!");
+        assertThat(shareCart.name()).isEqualTo("MY NAME IS HERE!");
 
-        assertThat(sharecart.switchValue(0)).isFalse();
-        assertThat(sharecart.switchValue(1)).isFalse();
-        assertThat(sharecart.switchValue(2)).isTrue();
-        assertThat(sharecart.switchValue(3)).isFalse();
-        assertThat(sharecart.switchValue(4)).isFalse();
-        assertThat(sharecart.switchValue(5)).isTrue();
-        assertThat(sharecart.switchValue(6)).isFalse();
-        assertThat(sharecart.switchValue(7)).isFalse();
+        assertThat(shareCart.switchValue(0)).isFalse();
+        assertThat(shareCart.switchValue(1)).isFalse();
+        assertThat(shareCart.switchValue(2)).isTrue();
+        assertThat(shareCart.switchValue(3)).isFalse();
+        assertThat(shareCart.switchValue(4)).isFalse();
+        assertThat(shareCart.switchValue(5)).isTrue();
+        assertThat(shareCart.switchValue(6)).isFalse();
+        assertThat(shareCart.switchValue(7)).isFalse();
     }
 
-    private void assertMissingParamFileMatchesParameters(Sharecart sharecart) {
-        assertThat(sharecart.x()).isEqualTo(100);
-        assertThat(sharecart.y()).isEqualTo(1);
-        assertThat(sharecart.misc(0)).isEqualTo(38424);
-        assertThat(sharecart.misc(1)).isEqualTo(61499);
-        assertThat(sharecart.misc(2)).isEqualTo(0);
-        assertThat(sharecart.misc(3)).isEqualTo(15107);
+    private void assertMissingParamFileMatchesParameters(ShareCart shareCart) {
+        assertThat(shareCart.x()).isEqualTo(100);
+        assertThat(shareCart.y()).isEqualTo(1);
+        assertThat(shareCart.misc(0)).isEqualTo(38424);
+        assertThat(shareCart.misc(1)).isEqualTo(61499);
+        assertThat(shareCart.misc(2)).isEqualTo(0);
+        assertThat(shareCart.misc(3)).isEqualTo(15107);
 
-        assertThat(sharecart.name()).isEqualTo("A name");
+        assertThat(shareCart.name()).isEqualTo("A name");
 
-        assertThat(sharecart.switchValue(0)).isFalse();
-        assertThat(sharecart.switchValue(1)).isFalse();
-        assertThat(sharecart.switchValue(2)).isTrue();
-        assertThat(sharecart.switchValue(3)).isFalse();
-        assertThat(sharecart.switchValue(4)).isFalse();
-        assertThat(sharecart.switchValue(5)).isTrue();
-        assertThat(sharecart.switchValue(6)).isFalse();
-        assertThat(sharecart.switchValue(7)).isFalse();
+        assertThat(shareCart.switchValue(0)).isFalse();
+        assertThat(shareCart.switchValue(1)).isFalse();
+        assertThat(shareCart.switchValue(2)).isTrue();
+        assertThat(shareCart.switchValue(3)).isFalse();
+        assertThat(shareCart.switchValue(4)).isFalse();
+        assertThat(shareCart.switchValue(5)).isTrue();
+        assertThat(shareCart.switchValue(6)).isFalse();
+        assertThat(shareCart.switchValue(7)).isFalse();
     }
 
-    private void assertConstraintFailureFileMatchesParameters(Sharecart sharecart) {
-        assertThat(sharecart.x()).isEqualTo(100);
-        assertThat(sharecart.y()).isEqualTo(Constraints.MAX_SIZE_Y);
-        assertThat(sharecart.misc(0)).isEqualTo(38424);
-        assertThat(sharecart.misc(1)).isEqualTo(61499);
-        assertThat(sharecart.misc(2)).isEqualTo(60753);
-        assertThat(sharecart.misc(3)).isEqualTo(Constraints.MAX_SIZE_MISC);
+    private void assertConstraintFailureFileMatchesParameters(ShareCart shareCart) {
+        assertThat(shareCart.x()).isEqualTo(100);
+        assertThat(shareCart.y()).isEqualTo(Constraints.MAX_SIZE_Y);
+        assertThat(shareCart.misc(0)).isEqualTo(38424);
+        assertThat(shareCart.misc(1)).isEqualTo(61499);
+        assertThat(shareCart.misc(2)).isEqualTo(60753);
+        assertThat(shareCart.misc(3)).isEqualTo(Constraints.MAX_SIZE_MISC);
 
-        assertThat(sharecart.name()).isEqualTo("MY NAME IS HERE!");
+        assertThat(shareCart.name()).isEqualTo("MY NAME IS HERE!");
 
-        assertThat(sharecart.switchValue(0)).isFalse();
-        assertThat(sharecart.switchValue(1)).isFalse();
-        assertThat(sharecart.switchValue(2)).isTrue();
-        assertThat(sharecart.switchValue(3)).isFalse();
-        assertThat(sharecart.switchValue(4)).isFalse();
-        assertThat(sharecart.switchValue(5)).isTrue();
-        assertThat(sharecart.switchValue(6)).isFalse();
-        assertThat(sharecart.switchValue(7)).isFalse();
+        assertThat(shareCart.switchValue(0)).isFalse();
+        assertThat(shareCart.switchValue(1)).isFalse();
+        assertThat(shareCart.switchValue(2)).isTrue();
+        assertThat(shareCart.switchValue(3)).isFalse();
+        assertThat(shareCart.switchValue(4)).isFalse();
+        assertThat(shareCart.switchValue(5)).isTrue();
+        assertThat(shareCart.switchValue(6)).isFalse();
+        assertThat(shareCart.switchValue(7)).isFalse();
     }
 
-    private void assertInvalidParamDefinitionFileMatchesParameters(Sharecart sharecart) {
-        assertThat(sharecart.x()).isEqualTo(100);
-        assertThat(sharecart.y()).isEqualTo(1);
-        assertThat(sharecart.misc(0)).isEqualTo(0);
-        assertThat(sharecart.misc(1)).isEqualTo(61499);
-        assertThat(sharecart.misc(2)).isEqualTo(60753);
-        assertThat(sharecart.misc(3)).isEqualTo(15107);
+    private void assertInvalidParamDefinitionFileMatchesParameters(ShareCart shareCart) {
+        assertThat(shareCart.x()).isEqualTo(100);
+        assertThat(shareCart.y()).isEqualTo(1);
+        assertThat(shareCart.misc(0)).isEqualTo(0);
+        assertThat(shareCart.misc(1)).isEqualTo(61499);
+        assertThat(shareCart.misc(2)).isEqualTo(60753);
+        assertThat(shareCart.misc(3)).isEqualTo(15107);
 
-        assertThat(sharecart.name()).isEqualTo("MY NAME IS HERE!");
+        assertThat(shareCart.name()).isEqualTo("MY NAME IS HERE!");
 
-        assertThat(sharecart.switchValue(0)).isFalse();
-        assertThat(sharecart.switchValue(1)).isFalse();
-        assertThat(sharecart.switchValue(2)).isTrue();
-        assertThat(sharecart.switchValue(3)).isFalse();
-        assertThat(sharecart.switchValue(4)).isFalse();
-        assertThat(sharecart.switchValue(5)).isTrue();
-        assertThat(sharecart.switchValue(6)).isFalse();
-        assertThat(sharecart.switchValue(7)).isFalse();
+        assertThat(shareCart.switchValue(0)).isFalse();
+        assertThat(shareCart.switchValue(1)).isFalse();
+        assertThat(shareCart.switchValue(2)).isTrue();
+        assertThat(shareCart.switchValue(3)).isFalse();
+        assertThat(shareCart.switchValue(4)).isFalse();
+        assertThat(shareCart.switchValue(5)).isTrue();
+        assertThat(shareCart.switchValue(6)).isFalse();
+        assertThat(shareCart.switchValue(7)).isFalse();
     }
 
-    private void assertInvalidParamNameMatchesParameters(Sharecart sharecart) {
-        assertThat(sharecart.x()).isEqualTo(100);
-        assertThat(sharecart.y()).isEqualTo(1);
-        assertThat(sharecart.misc(0)).isEqualTo(38424);
-        assertThat(sharecart.misc(1)).isEqualTo(61499);
-        assertThat(sharecart.misc(2)).isEqualTo(0);
-        assertThat(sharecart.misc(3)).isEqualTo(15107);
+    private void assertInvalidParamNameMatchesParameters(ShareCart shareCart) {
+        assertThat(shareCart.x()).isEqualTo(100);
+        assertThat(shareCart.y()).isEqualTo(1);
+        assertThat(shareCart.misc(0)).isEqualTo(38424);
+        assertThat(shareCart.misc(1)).isEqualTo(61499);
+        assertThat(shareCart.misc(2)).isEqualTo(0);
+        assertThat(shareCart.misc(3)).isEqualTo(15107);
 
-        assertThat(sharecart.name()).isEqualTo("A name");
+        assertThat(shareCart.name()).isEqualTo("A name");
 
-        assertThat(sharecart.switchValue(0)).isFalse();
-        assertThat(sharecart.switchValue(1)).isFalse();
-        assertThat(sharecart.switchValue(2)).isTrue();
-        assertThat(sharecart.switchValue(3)).isFalse();
-        assertThat(sharecart.switchValue(4)).isFalse();
-        assertThat(sharecart.switchValue(5)).isTrue();
-        assertThat(sharecart.switchValue(6)).isFalse();
-        assertThat(sharecart.switchValue(7)).isFalse();
+        assertThat(shareCart.switchValue(0)).isFalse();
+        assertThat(shareCart.switchValue(1)).isFalse();
+        assertThat(shareCart.switchValue(2)).isTrue();
+        assertThat(shareCart.switchValue(3)).isFalse();
+        assertThat(shareCart.switchValue(4)).isFalse();
+        assertThat(shareCart.switchValue(5)).isTrue();
+        assertThat(shareCart.switchValue(6)).isFalse();
+        assertThat(shareCart.switchValue(7)).isFalse();
     }
 }

@@ -25,6 +25,6 @@ public class InvalidParameterExceptionTest {
     public void testExtends_sharecart_exception() throws Exception {
         InvalidParameterException exception = new InvalidParameterException("test", 0);
 
-        assertThat(exception).isInstanceOf(SharecartException.class);
+        assertThat(exception).isInstanceOf(ShareCartException.class);
     }
 }

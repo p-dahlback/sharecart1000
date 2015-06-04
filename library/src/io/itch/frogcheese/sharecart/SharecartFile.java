@@ -5,24 +5,24 @@ import java.io.File;
 /**
  * Created by Peter on 15-05-23.
  */
-class SharecartFile {
+class ShareCartFile {
 
     private File file;
     private boolean autoCreated = false;
 
-    public static SharecartFile fromFile(File file) {
-        return new SharecartFile(file);
+    public static ShareCartFile fromFile(File file) {
+        return new ShareCartFile(file);
     }
 
-    public static SharecartFile fromAutoCreatedFile(File file) {
-        return new SharecartFile(file, true);
+    public static ShareCartFile fromAutoCreatedFile(File file) {
+        return new ShareCartFile(file, true);
     }
 
-    private SharecartFile(File file) {
+    private ShareCartFile(File file) {
         this(file, false);
     }
 
-    private SharecartFile(File file, boolean autoCreated) {
+    private ShareCartFile(File file, boolean autoCreated) {
         if (file == null)
             throw new IllegalArgumentException("Cannot pass null as a file.");
 
@@ -47,7 +47,7 @@ class SharecartFile {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        SharecartFile that = (SharecartFile) o;
+        ShareCartFile that = (ShareCartFile) o;
 
         return file.equals(that.file);
 

@@ -6,7 +6,7 @@ import java.util.Locale;
  * Describes when a parameter could not be modified because the new value
  * was invalid.
  */
-public class InvalidParameterException extends SharecartException {
+public class InvalidParameterException extends ShareCartException {
 
     /**
      *

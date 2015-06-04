@@ -5,63 +5,63 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 
-public abstract class SharecartFileInterface {
+public abstract class ShareCartFileInterface {
 
     private static final String DAT_DIRECTORY = "dat";
     private static final String SHARECART_FILE = "o_o.ini";
 
 
-    private static SharecartFileInterface INSTANCE = null;
+    private static ShareCartFileInterface INSTANCE = null;
 
 
-    public static SharecartFileInterface get() {
+    public static ShareCartFileInterface get() {
         if(INSTANCE == null) {
-            INSTANCE = new SharecartFileInterfaceImpl();
+            INSTANCE = new ShareCartFileInterfaceImpl();
         }
         return INSTANCE;
     }
 
-    public static void inject(SharecartFileInterface impl) {
+    public static void inject(ShareCartFileInterface impl) {
         INSTANCE = impl;
     }
 
-    public abstract SharecartFileReader getNewSharecartFileReader(SharecartFile file) throws FileNotFoundException;
+    public abstract ShareCartFileReader getNewSharecartFileReader(ShareCartFile file) throws FileNotFoundException;
 
-    public abstract SharecartFileWriter getNewSharecartFileWriter(SharecartFile file) throws FileNotFoundException;
+    public abstract ShareCartFileWriter getNewSharecartFileWriter(ShareCartFile file) throws FileNotFoundException;
 
-    public abstract SharecartFile findIniFile(int directoryLevelsToCheck, String startingPath);
+    public abstract ShareCartFile findIniFile(int directoryLevelsToCheck, String startingPath);
 
-    public abstract SharecartFile findOrCreateIniFile(int directoryLevelsToCheck, String startingPath);
+    public abstract ShareCartFile findOrCreateIniFile(int directoryLevelsToCheck, String startingPath);
 
     /**
      * Default implementation.
      */
-    private static class SharecartFileInterfaceImpl extends SharecartFileInterface {
+    private static class ShareCartFileInterfaceImpl extends ShareCartFileInterface {
         @Override
-        public SharecartFileReader getNewSharecartFileReader(SharecartFile file) throws FileNotFoundException {
-            return new SharecartFileReader(file.getFile());
+        public ShareCartFileReader getNewSharecartFileReader(ShareCartFile file) throws FileNotFoundException {
+            return new ShareCartFileReader(file.getFile());
         }
 
         @Override
-        public SharecartFileWriter getNewSharecartFileWriter(SharecartFile file) throws FileNotFoundException {
-            return new SharecartFileWriter(file.getFile());
+        public ShareCartFileWriter getNewSharecartFileWriter(ShareCartFile file) throws FileNotFoundException {
+            return new ShareCartFileWriter(file.getFile());
         }
 
-        public SharecartFile findIniFile(int directoryLevelsToCheck, String startingPath) {
+        public ShareCartFile findIniFile(int directoryLevelsToCheck, String startingPath) {
             return findIniFile(directoryLevelsToCheck, startingPath, false);
         }
 
-        public SharecartFile findOrCreateIniFile(int directoryLevelsToCheck, String startingPath) {
+        public ShareCartFile findOrCreateIniFile(int directoryLevelsToCheck, String startingPath) {
             return findIniFile(directoryLevelsToCheck, startingPath, true);
         }
 
-        private SharecartFile findIniFile(int directoryLevelsToCheck, String startingPath, boolean createIfNotExists) {
+        private ShareCartFile findIniFile(int directoryLevelsToCheck, String startingPath, boolean createIfNotExists) {
             for (int i = 0; i <= directoryLevelsToCheck; i++) {
-                File file = SharecartFileUtils.getFileAboveDirectory(i, startingPath, DAT_DIRECTORY);
+                File file = ShareCartFileUtils.getFileAboveDirectory(i, startingPath, DAT_DIRECTORY);
                 if (file.exists()) {
                     file = new File(file, SHARECART_FILE);
                     if (file.exists()) {
-                        return SharecartFile.fromFile(file);
+                        return ShareCartFile.fromFile(file);
                     }
                     if (createIfNotExists) {
                         return createIniFile(file);
@@ -74,9 +74,9 @@ public abstract class SharecartFileInterface {
             return null;
         }
 
-        private SharecartFile createDatDirectory(int directoryLevelsToCheck, String startingPath) {
+        private ShareCartFile createDatDirectory(int directoryLevelsToCheck, String startingPath) {
             for (int i = 0; i <= directoryLevelsToCheck; i++) {
-                File dir = SharecartFileUtils.getFileAboveDirectory(i, startingPath, "../");
+                File dir = ShareCartFileUtils.getFileAboveDirectory(i, startingPath, "../");
                 if (dir.exists() && dir.isDirectory()) {
                     File dat = new File(dir, DAT_DIRECTORY);
                     if (dat.mkdir()) {
@@ -88,13 +88,13 @@ public abstract class SharecartFileInterface {
             return null;
         }
 
-        private SharecartFile createIniFile(File file) {
+        private ShareCartFile createIniFile(File file) {
             if (file.exists()) {
-                return SharecartFile.fromFile(file);
+                return ShareCartFile.fromFile(file);
             } else {
                 try {
                     if (file.createNewFile()) {
-                        return SharecartFile.fromAutoCreatedFile(file);
+                        return ShareCartFile.fromAutoCreatedFile(file);
                     }
                 } catch (IOException e) {
                     e.printStackTrace();

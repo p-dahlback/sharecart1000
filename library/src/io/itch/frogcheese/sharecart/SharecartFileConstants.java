@@ -3,7 +3,7 @@ package io.itch.frogcheese.sharecart;
 /**
  * Constants for the sharecart file.
  */
-class SharecartFileConstants {
+class ShareCartFileConstants {
 
     /**
      * Title string found at the top of a sharecart file.

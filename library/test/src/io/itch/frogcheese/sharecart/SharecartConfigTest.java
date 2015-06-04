@@ -8,13 +8,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.failBecauseExceptionWasNotThrown;
 
 
-public class SharecartConfigTest {
+public class ShareCartConfigTest {
 
-    private SharecartConfig.Builder configBuilder;
+    private ShareCartConfig.Builder configBuilder;
 
     @Before
     public void setUp() throws Exception {
-        configBuilder = new SharecartConfig.Builder();
+        configBuilder = new ShareCartConfig.Builder();
     }
 
     @After
@@ -29,20 +29,20 @@ public class SharecartConfigTest {
 
     @Test
     public void testDefault_values() throws Exception {
-        SharecartConfig config = configBuilder.build();
+        ShareCartConfig config = configBuilder.build();
 
         assertThat(config).isNotNull();
         assertThat(config.willClampToConstraints()).isFalse();
         assertThat(config.willAutoCreateFile()).isFalse();
         assertThat(config.isStrictFileReadMode()).isFalse();
-        assertThat(SharecartConfig.DEFAULT_LEVELS_TO_CHECK).isEqualTo(4);
-        assertThat(config.getDirectoryLevelsToCheck()).isEqualTo(SharecartConfig.DEFAULT_LEVELS_TO_CHECK);
-        assertThat(config.getApplicationPath()).isEqualTo(SharecartFileUtils.getApplicationPath());
+        assertThat(ShareCartConfig.DEFAULT_LEVELS_TO_CHECK).isEqualTo(4);
+        assertThat(config.getDirectoryLevelsToCheck()).isEqualTo(ShareCartConfig.DEFAULT_LEVELS_TO_CHECK);
+        assertThat(config.getApplicationPath()).isEqualTo(ShareCartFileUtils.getApplicationPath());
     }
 
     @Test
     public void testBuilder_values_propagate_to_config() throws Exception {
-        SharecartConfig config = configBuilder
+        ShareCartConfig config = configBuilder
                 .setClampToConstraints(true)
                 .setAutoCreateFile(false)
                 .setApplicationPath("path/path/directory")
@@ -60,7 +60,7 @@ public class SharecartConfigTest {
 
     @Test
     public void testBuilder_default_values_for_unset_properties() throws Exception {
-        SharecartConfig config = configBuilder
+        ShareCartConfig config = configBuilder
                 .setApplicationPath("path/path/directory")
                 .setStrictFileReadMode(true)
                 .build();
@@ -70,17 +70,17 @@ public class SharecartConfigTest {
         assertThat(config.willAutoCreateFile()).isFalse();
         assertThat(config.getApplicationPath()).isEqualTo("path/path/directory");
         assertThat(config.isStrictFileReadMode()).isTrue();
-        assertThat(config.getDirectoryLevelsToCheck()).isEqualTo(SharecartConfig.DEFAULT_LEVELS_TO_CHECK);
+        assertThat(config.getDirectoryLevelsToCheck()).isEqualTo(ShareCartConfig.DEFAULT_LEVELS_TO_CHECK);
     }
 
     @Test
     public void testApplication_path_null_is_replaced_with_default() throws Exception {
-        SharecartConfig config = configBuilder
+        ShareCartConfig config = configBuilder
                 .setApplicationPath(null)
                 .build();
 
         assertThat(config).isNotNull();
-        assertThat(config.getApplicationPath()).isEqualTo(SharecartFileUtils.getApplicationPath());
+        assertThat(config.getApplicationPath()).isEqualTo(ShareCartFileUtils.getApplicationPath());
     }
 
     @Test
@@ -96,7 +96,7 @@ public class SharecartConfigTest {
 
     @Test
     public void testBuilder_is_reusable() throws Exception {
-        SharecartConfig config1 = configBuilder.setClampToConstraints(true)
+        ShareCartConfig config1 = configBuilder.setClampToConstraints(true)
                 .setAutoCreateFile(true)
                 .setClampToConstraints(false)
                 .setDirectoryLevelsToCheck(20)
@@ -104,7 +104,7 @@ public class SharecartConfigTest {
                 .setApplicationPath("a path")
                 .build();
 
-        SharecartConfig config2 = configBuilder.setAutoCreateFile(false)
+        ShareCartConfig config2 = configBuilder.setAutoCreateFile(false)
                 .setAutoCreateFile(false)
                 .setClampToConstraints(true)
                 .setApplicationPath("another path")

@@ -1,9 +1,9 @@
 package io.itch.frogcheese.sharecart;
 
 /**
- * Configuration for the {@link SharecartManager}.
+ * Configuration for the {@link ShareCartManager}.
  */
-public class SharecartConfig {
+public class ShareCartConfig {
 
     static final int DEFAULT_LEVELS_TO_CHECK = 4;
 
@@ -14,13 +14,13 @@ public class SharecartConfig {
     private String applicationPath;
 
     /**
-     * Utility class for creating a SharecartConfig instance.
+     * Utility class for creating a ShareCartConfig instance.
      */
     public static class Builder {
-        SharecartConfig config;
+        ShareCartConfig config;
 
         public Builder() {
-            config = new SharecartConfig();
+            config = new ShareCartConfig();
         }
 
         /**
@@ -86,21 +86,21 @@ public class SharecartConfig {
 
 
         /**
-         * Builds the SharecartConfig instance.
+         * Builds the ShareCartConfig instance.
          *
-         * @return A new Sharecart configuration instance with the assigned parameters.
+         * @return A new ShareCart configuration instance with the assigned parameters.
          */
-        public SharecartConfig build() {
-            return new SharecartConfig(config);
+        public ShareCartConfig build() {
+            return new ShareCartConfig(config);
         }
 
     }
 
-    private SharecartConfig() {
+    private ShareCartConfig() {
 
     }
 
-    private SharecartConfig(SharecartConfig other) {
+    private ShareCartConfig(ShareCartConfig other) {
         createSharecartIfNotExists = other.createSharecartIfNotExists;
         directoryLevelsToCheck = other.directoryLevelsToCheck;
         clampToConstraints = other.clampToConstraints;
@@ -108,7 +108,7 @@ public class SharecartConfig {
         applicationPath = other.applicationPath;
 
         if (applicationPath == null) {
-            applicationPath = SharecartFileUtils.getApplicationPath();
+            applicationPath = ShareCartFileUtils.getApplicationPath();
         }
     }
 

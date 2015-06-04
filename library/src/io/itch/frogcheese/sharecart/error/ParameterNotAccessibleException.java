@@ -6,7 +6,7 @@ import java.util.Locale;
  * Describes when a parameter could not be accessed because of an invalid
  * sharecart state.
  */
-public class ParameterNotAccessibleException extends SharecartException {
+public class ParameterNotAccessibleException extends ShareCartException {
 
     /**
      *

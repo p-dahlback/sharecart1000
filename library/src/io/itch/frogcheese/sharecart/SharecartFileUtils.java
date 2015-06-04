@@ -5,7 +5,7 @@ import java.io.File;
 /**
  * Some utilities for handling sharecart files.
  */
-class SharecartFileUtils {
+class ShareCartFileUtils {
 
 	static String RUNNING_DIR = null;
 	static String APP_DIR = null;
@@ -33,7 +33,7 @@ class SharecartFileUtils {
 			}
 
 			if(dir == null) {
-				APP_DIR = SharecartFileUtils.getRunningDirectory();
+				APP_DIR = ShareCartFileUtils.getRunningDirectory();
 			} else {
 				APP_DIR = dir;
 			}
@@ -48,7 +48,7 @@ class SharecartFileUtils {
 	 * actually exists at that location.
 	 */
 	public static File getFileFromRunningDirectory(String filePath) {
-		return new File(SharecartFileUtils.getRunningDirectory(), filePath);
+		return new File(ShareCartFileUtils.getRunningDirectory(), filePath);
 	}
 
 	/**
@@ -61,7 +61,7 @@ class SharecartFileUtils {
 	 * @see #getFileAboveDirectory(int, String, String)
 	 */
 	public static File getFileAboveRunningDirectory(int levels, String filePath) {
-		return SharecartFileUtils.getFileAboveDirectory(levels, SharecartFileUtils.getRunningDirectory(), filePath);
+		return ShareCartFileUtils.getFileAboveDirectory(levels, ShareCartFileUtils.getRunningDirectory(), filePath);
 	}
 
 	/**

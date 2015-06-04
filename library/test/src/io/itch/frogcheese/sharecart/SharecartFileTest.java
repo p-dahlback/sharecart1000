@@ -11,7 +11,7 @@ import java.io.File;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.failBecauseExceptionWasNotThrown;
 
-public class SharecartFileTest {
+public class ShareCartFileTest {
 
     private File file;
 
@@ -32,7 +32,7 @@ public class SharecartFileTest {
 
     @Test
     public void testCreate_from_file() throws Exception {
-        SharecartFile model = SharecartFile.fromFile(file);
+        ShareCartFile model = ShareCartFile.fromFile(file);
 
         assertThat(model).isNotNull();
         assertThat(model.getFile()).isSameAs(file);
@@ -42,7 +42,7 @@ public class SharecartFileTest {
     @Test
     public void testCreate_from_file_rejects_null() throws Exception {
         try {
-            SharecartFile.fromFile(null);
+            ShareCartFile.fromFile(null);
             failBecauseExceptionWasNotThrown(IllegalArgumentException.class);
         } catch (IllegalArgumentException e) {
             assertThat(e).hasMessage("Cannot pass null as a file.");
@@ -51,7 +51,7 @@ public class SharecartFileTest {
 
     @Test
     public void testCreate_from_file_autocreated() throws Exception {
-        SharecartFile model = SharecartFile.fromAutoCreatedFile(file);
+        ShareCartFile model = ShareCartFile.fromAutoCreatedFile(file);
 
         assertThat(model).isNotNull();
         assertThat(model.getFile()).isSameAs(file);
@@ -61,7 +61,7 @@ public class SharecartFileTest {
     @Test
     public void testCreate_from_file_autocreated_rejects_null() throws Exception {
         try {
-            SharecartFile.fromAutoCreatedFile(null);
+            ShareCartFile.fromAutoCreatedFile(null);
             failBecauseExceptionWasNotThrown(IllegalArgumentException.class);
         } catch (IllegalArgumentException e) {
             assertThat(e).hasMessage("Cannot pass null as a file.");
@@ -70,7 +70,7 @@ public class SharecartFileTest {
 
     @Test
     public void testSetAutoCreated() throws Exception {
-        SharecartFile model = SharecartFile.fromFile(file);
+        ShareCartFile model = ShareCartFile.fromFile(file);
 
         model.setIsAutoCreated(true);
 

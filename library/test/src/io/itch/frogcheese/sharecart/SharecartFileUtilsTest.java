@@ -8,7 +8,7 @@ import java.io.File;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class SharecartFileUtilsTest {
+public class ShareCartFileUtilsTest {
 
     private String runningDirectory;
 
@@ -16,8 +16,8 @@ public class SharecartFileUtilsTest {
     public void setUp() throws Exception {
         runningDirectory = System.getProperty("user.dir");
         System.clearProperty("application.dir");
-        SharecartFileUtils.APP_DIR = null;
-        SharecartFileUtils.RUNNING_DIR = null;
+        ShareCartFileUtils.APP_DIR = null;
+        ShareCartFileUtils.RUNNING_DIR = null;
     }
 
     @After
@@ -31,45 +31,45 @@ public class SharecartFileUtilsTest {
 
     @Test
     public void testRunningDirectory_set_from_system_properties() throws Exception {
-        assertThat(SharecartFileUtils.getRunningDirectory()).isEqualTo(runningDirectory);
+        assertThat(ShareCartFileUtils.getRunningDirectory()).isEqualTo(runningDirectory);
     }
 
     @Test
     public void testApplicationPath_same_as_running_directory() throws Exception {
-        assertThat(SharecartFileUtils.getApplicationPath()).isEqualTo(runningDirectory);
+        assertThat(ShareCartFileUtils.getApplicationPath()).isEqualTo(runningDirectory);
     }
 
     @Test
     public void testApplicationPath_set_from_system_properties() throws Exception {
         System.setProperty("application.dir", "a/path/to/the/application");
 
-        assertThat(SharecartFileUtils.getApplicationPath()).isEqualTo("a/path/to/the/application");
+        assertThat(ShareCartFileUtils.getApplicationPath()).isEqualTo("a/path/to/the/application");
     }
 
     @Test
     public void testFile_from_running_path() throws Exception {
-        assertThat(SharecartFileUtils.getFileFromRunningDirectory("file"))
+        assertThat(ShareCartFileUtils.getFileFromRunningDirectory("file"))
                 .isEqualTo(new File(runningDirectory + "/file"));
 
-        assertThat(SharecartFileUtils.getFileFromRunningDirectory("file/with/a/path"))
+        assertThat(ShareCartFileUtils.getFileFromRunningDirectory("file/with/a/path"))
                 .isEqualTo(new File(runningDirectory + "/file/with/a/path"));
     }
 
     @Test
     public void testDirectories_above_running_path() throws Exception {
-        assertThat(SharecartFileUtils.getFileAboveRunningDirectory(2, "file"))
+        assertThat(ShareCartFileUtils.getFileAboveRunningDirectory(2, "file"))
                 .isEqualTo(new File(runningDirectory + "/../../file"));
 
-        assertThat(SharecartFileUtils.getFileAboveRunningDirectory(3, "file"))
+        assertThat(ShareCartFileUtils.getFileAboveRunningDirectory(3, "file"))
                 .isEqualTo(new File(runningDirectory + "/../../../file"));
     }
 
     @Test
     public void testDirectories_above_directory() throws Exception {
-        assertThat(SharecartFileUtils.getFileAboveDirectory(2, "a/dir/", "file"))
+        assertThat(ShareCartFileUtils.getFileAboveDirectory(2, "a/dir/", "file"))
                 .isEqualTo(new File("a/dir/../../file"));
 
-        assertThat(SharecartFileUtils.getFileAboveDirectory(1, "a/dir/", "file"))
+        assertThat(ShareCartFileUtils.getFileAboveDirectory(1, "a/dir/", "file"))
                 .isEqualTo(new File("a/dir/../file"));
     }
 }

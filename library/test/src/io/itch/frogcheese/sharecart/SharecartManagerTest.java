@@ -12,7 +12,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.failBecauseExceptionWasNotThrown;
 import static org.mockito.Matchers.any;
 
-public class SharecartManagerTest extends SharecartManagerTestBase {
+public class ShareCartManagerTest extends ShareCartManagerTestBase {
 
     @Test
     public void testChange_params_after_load() throws Exception {
@@ -211,11 +211,11 @@ public class SharecartManagerTest extends SharecartManagerTestBase {
 
     @Test
     public void testClamp_parameters_to_constraints() throws Exception {
-        config = new SharecartConfig.Builder()
+        config = new ShareCartConfig.Builder()
                 .setClampToConstraints(true)
                 .build();
-        SharecartManager.initialize(config);
-        manager = SharecartManager.get();
+        ShareCartManager.initialize(config);
+        manager = ShareCartManager.get();
         loadSharecart();
 
         manager.x(-1);
@@ -251,11 +251,11 @@ public class SharecartManagerTest extends SharecartManagerTestBase {
 
     @Test
     public void testFail_index_constraints_with_clamp_to_constraints() throws Exception {
-        config = new SharecartConfig.Builder()
+        config = new ShareCartConfig.Builder()
                 .setClampToConstraints(true)
                 .build();
-        SharecartManager.initialize(config);
-        manager = SharecartManager.get();
+        ShareCartManager.initialize(config);
+        manager = ShareCartManager.get();
 
         testFailing_misc_index_constraints_throws_exception();
         testFailing_switch_index_constraints_throws_exception();
@@ -270,7 +270,7 @@ public class SharecartManagerTest extends SharecartManagerTestBase {
 
         manager.save();
 
-        Mockito.verify(mockWriter).write(any(Sharecart.class));
+        Mockito.verify(mockWriter).write(any(ShareCart.class));
 
         assertThat(manager.hasUnsavedChanges()).isFalse();
 

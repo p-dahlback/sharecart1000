@@ -18,7 +18,7 @@ public class ParameterNotAccessibleExceptionTest {
     public void testExtends_sharecart_exception() throws Exception {
         ParameterNotAccessibleException exception = new ParameterNotAccessibleException("test");
 
-        assertThat(exception).isInstanceOf(SharecartException.class);
+        assertThat(exception).isInstanceOf(ShareCartException.class);
     }
 
 }

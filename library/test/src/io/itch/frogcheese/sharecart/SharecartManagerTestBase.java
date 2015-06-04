@@ -3,7 +3,6 @@ package io.itch.frogcheese.sharecart;
 
 import io.itch.frogcheese.sharecart._test.Constants;
 import io.itch.frogcheese.sharecart.error.ParameterNotAccessibleException;
-import io.itch.frogcheese.sharecart.error.ParameterNotAccessibleExceptionTest;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -21,40 +20,40 @@ import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.*;
 
 @Ignore("Base class containing some setup tests and logic")
-public abstract class SharecartManagerTestBase {
+public abstract class ShareCartManagerTestBase {
 
     protected static final String APPLICATION_PATH = Constants.TEST_RESOURCES_PATH + "games/subfolder/subsubfolder";
 
-    protected SharecartFileReader mockReader;
-    protected SharecartFileWriter mockWriter;
-    protected SharecartFileInterface mockFileInterface;
+    protected ShareCartFileReader mockReader;
+    protected ShareCartFileWriter mockWriter;
+    protected ShareCartFileInterface mockFileInterface;
 
-    protected SharecartFile sharecartFile;
+    protected ShareCartFile shareCartFile;
 
-    protected SharecartManager manager;
+    protected ShareCartManager manager;
 
-    protected SharecartConfig config;
+    protected ShareCartConfig config;
 
     @Before
     public void setUp() throws Exception {
-        mockReader = mock(SharecartFileReader.class);
-        mockWriter = mock(SharecartFileWriter.class);
-        mockFileInterface = mock(SharecartFileInterface.class);
+        mockReader = mock(ShareCartFileReader.class);
+        mockWriter = mock(ShareCartFileWriter.class);
+        mockFileInterface = mock(ShareCartFileInterface.class);
 
-        when(mockFileInterface.getNewSharecartFileReader(any(SharecartFile.class))).thenReturn(mockReader);
-        when(mockFileInterface.getNewSharecartFileWriter(any(SharecartFile.class))).thenReturn(mockWriter);
+        when(mockFileInterface.getNewSharecartFileReader(any(ShareCartFile.class))).thenReturn(mockReader);
+        when(mockFileInterface.getNewSharecartFileWriter(any(ShareCartFile.class))).thenReturn(mockWriter);
 
-        SharecartFileInterface.inject(mockFileInterface);
+        ShareCartFileInterface.inject(mockFileInterface);
 
-        sharecartFile = SharecartFile.fromFile(new File(Constants.TEST_RESOURCES_PATH, "dat/o_o.ini"));
-        config = new SharecartConfig.Builder()
+        shareCartFile = ShareCartFile.fromFile(new File(Constants.TEST_RESOURCES_PATH, "dat/o_o.ini"));
+        config = new ShareCartConfig.Builder()
                 .setDirectoryLevelsToCheck(3)
                 .setAutoCreateFile(false)
                 .setClampToConstraints(false)
                 .setApplicationPath(APPLICATION_PATH)
                 .build();
-        SharecartManager.initialize(config);
-        manager = SharecartManager.get();
+        ShareCartManager.initialize(config);
+        manager = ShareCartManager.get();
     }
 
     @After
@@ -66,8 +65,8 @@ public abstract class SharecartManagerTestBase {
     public void testPreconditions() throws Exception {
         assertThat(config).isNotNull();
         assertThat(manager).isNotNull();
-        assertThat(sharecartFile).isNotNull();
-        assertThat(sharecartFile.getFile()).isFile();
+        assertThat(shareCartFile).isNotNull();
+        assertThat(shareCartFile.getFile()).isFile();
 
         assertThat(mockReader).isNotNull();
         assertThat(mockWriter).isNotNull();
@@ -77,7 +76,7 @@ public abstract class SharecartManagerTestBase {
         assertThat(mockUtil.isMock(mockWriter)).isTrue();
         assertThat(mockUtil.isMock(mockFileInterface)).isTrue();
 
-        SharecartFileInterface fileInterface = SharecartFileInterface.get();
+        ShareCartFileInterface fileInterface = ShareCartFileInterface.get();
         assertThat(fileInterface.getNewSharecartFileReader(null)).isSameAs(mockReader);
         assertThat(fileInterface.getNewSharecartFileWriter(null)).isSameAs(mockWriter);
 
@@ -107,7 +106,7 @@ public abstract class SharecartManagerTestBase {
 
     @Test
     public void testFind_valid_file_above_app_directory_success() throws Exception {
-        mockFileSearchResult(sharecartFile);
+        mockFileSearchResult(shareCartFile);
         boolean valid = manager.validateSharecartFile();
         assertThat(valid).isTrue();
         assertThat(manager.isValidSharecartFile()).isTrue();
@@ -121,15 +120,15 @@ public abstract class SharecartManagerTestBase {
 
     @Test
     public void testAuto_create_new_sharecart_file() throws Exception {
-        sharecartFile.setIsAutoCreated(true);
-        mockFileSearchResult(sharecartFile);
-        config = new SharecartConfig.Builder()
+        shareCartFile.setIsAutoCreated(true);
+        mockFileSearchResult(shareCartFile);
+        config = new ShareCartConfig.Builder()
                 .setDirectoryLevelsToCheck(3)
                 .setAutoCreateFile(true)
                 .setApplicationPath(APPLICATION_PATH)
                 .build();
-        SharecartManager.initialize(config);
-        manager = SharecartManager.get();
+        ShareCartManager.initialize(config);
+        manager = ShareCartManager.get();
 
         boolean valid = manager.validateSharecartFile();
         assertThat(valid).isTrue();
@@ -147,21 +146,21 @@ public abstract class SharecartManagerTestBase {
 
         assertThat(manager.hasUnsavedChanges()).isFalse();
 
-        verify(mockWriter).write(any(Sharecart.class));
+        verify(mockWriter).write(any(ShareCart.class));
         verifyNoMoreInteractions(mockReader);
     }
 
     @Test
     public void testFind_or_create_existing_sharecart_file() throws Exception {
-        sharecartFile.setIsAutoCreated(false);
-        mockFileSearchResult(sharecartFile);
-        config = new SharecartConfig.Builder()
+        shareCartFile.setIsAutoCreated(false);
+        mockFileSearchResult(shareCartFile);
+        config = new ShareCartConfig.Builder()
                 .setDirectoryLevelsToCheck(3)
                 .setAutoCreateFile(true)
                 .setApplicationPath(APPLICATION_PATH)
                 .build();
-        SharecartManager.initialize(config);
-        manager = SharecartManager.get();
+        ShareCartManager.initialize(config);
+        manager = ShareCartManager.get();
 
         boolean valid = manager.validateSharecartFile();
         assertThat(valid).isTrue();
@@ -262,8 +261,8 @@ public abstract class SharecartManagerTestBase {
     }
 
     protected void loadSharecart() {
-        mockFileSearchResult(sharecartFile);
-        when(mockReader.read()).thenReturn(Sharecart.withDefaults());
+        mockFileSearchResult(shareCartFile);
+        when(mockReader.read()).thenReturn(ShareCart.withDefaults());
         manager.validateSharecartFile();
         manager.load();
 
@@ -271,7 +270,7 @@ public abstract class SharecartManagerTestBase {
         assertThat(manager.isLoaded()).isTrue();
     }
 
-    protected void mockFileSearchResult(SharecartFile file) {
+    protected void mockFileSearchResult(ShareCartFile file) {
         when(mockFileInterface.findIniFile(anyInt(), anyString())).thenReturn(file);
         when(mockFileInterface.findOrCreateIniFile(anyInt(), anyString())).thenReturn(file);
     }
