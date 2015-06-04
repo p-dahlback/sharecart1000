@@ -21,6 +21,8 @@ public class SharecartFileReaderTest {
     private File constraintFailureFile;
     private File invalidParamDefinitionFile;
     private File invalidParamNameFile;
+    private File emptyFile;
+    private File partialFile;
     private File invalidFile;
     private SharecartFileReader reader;
 
@@ -31,6 +33,8 @@ public class SharecartFileReaderTest {
         constraintFailureFile = new File(TEST_RESOURCES_PATH, "sharecart_constraint_failure.ini");
         invalidParamDefinitionFile = new File(TEST_RESOURCES_PATH, "sharecart_invalid_parameter_definition.ini");
         invalidParamNameFile = new File(TEST_RESOURCES_PATH, "sharecart_invalid_parameter_name.ini");
+        emptyFile = new File(TEST_RESOURCES_PATH, "sharecart_empty.ini");
+        partialFile = new File(TEST_RESOURCES_PATH, "sharecart_partial.ini");
         invalidFile = new File(TEST_RESOURCES_PATH, "invalidFile");
     }
 
@@ -53,7 +57,7 @@ public class SharecartFileReaderTest {
     @Test
     public void testConstruct_rejects_null() throws Exception {
         try {
-            new SharecartFileReader((File) null);
+            new SharecartFileReader(null);
             failBecauseExceptionWasNotThrown(IllegalArgumentException.class);
         } catch (IllegalArgumentException ignored) {
 
@@ -112,7 +116,8 @@ public class SharecartFileReaderTest {
             reader.read();
             failBecauseExceptionWasNotThrown(SharecartFormatException.class);
         } catch (SharecartFormatException e) {
-            assertThat(e).hasMessage("Found 'Misc3' where parameter 'Misc2' was expected");
+            assertThat(e).hasMessage("File 'test/resources/sharecart_missing_parameter.ini', line 5: " +
+                    "Found 'Misc3' where parameter 'Misc2' was expected");
         }
     }
 
@@ -134,7 +139,8 @@ public class SharecartFileReaderTest {
             reader.read();
             failBecauseExceptionWasNotThrown(SharecartFormatException.class);
         } catch (SharecartFormatException e) {
-            assertThat(e).hasMessage("The MapY value '550000' does not fulfill the constraints of the parameter");
+            assertThat(e).hasMessage("File 'test/resources/sharecart_constraint_failure.ini', line 2: " +
+                    "The MapY value '550000' does not fulfill the constraints of the parameter");
         }
     }
 
@@ -156,7 +162,8 @@ public class SharecartFileReaderTest {
             reader.read();
             failBecauseExceptionWasNotThrown(SharecartFormatException.class);
         } catch (SharecartFormatException e) {
-            assertThat(e).hasMessage("'Misc038424' is not a valid parameter definition");
+            assertThat(e).hasMessage("File 'test/resources/sharecart_invalid_parameter_definition.ini', line 3: " +
+                    "'Misc038424' is not a valid parameter definition");
         }
     }
 
@@ -178,7 +185,65 @@ public class SharecartFileReaderTest {
             reader.read();
             failBecauseExceptionWasNotThrown(SharecartFormatException.class);
         } catch (SharecartFormatException e) {
-            assertThat(e).hasMessage("Found 'Misc' where parameter 'Misc2' was expected");
+            assertThat(e).hasMessage("File 'test/resources/sharecart_invalid_parameter_name.ini', line 5: " +
+                    "Found 'Misc' where parameter 'Misc2' was expected");
+        }
+    }
+
+    @Test
+    public void testRead_empty_file() throws Exception {
+        SharecartFileReader reader = new SharecartFileReader(emptyFile);
+        reader.setIsStrict(false);
+
+        Sharecart sharecart = reader.read();
+        assertThat(sharecart).isEqualTo(Sharecart.withDefaults());
+    }
+
+    @Test
+    public void testRead_empty_file_strict() throws Exception {
+        SharecartFileReader reader = new SharecartFileReader(emptyFile);
+        reader.setIsStrict(true);
+
+        try {
+            reader.read();
+            failBecauseExceptionWasNotThrown(SharecartFormatException.class);
+        } catch (SharecartFormatException e) {
+            assertThat(e).hasMessage("File 'test/resources/sharecart_empty.ini', line 0: " +
+                    "Encountered end of file prematurely");
+        }
+    }
+
+    @Test
+    public void testRead_partial_file() throws Exception {
+        SharecartFileReader reader = new SharecartFileReader(partialFile);
+        reader.setIsStrict(false);
+
+        Sharecart sharecart = reader.read();
+        assertThat(sharecart.x()).isEqualTo(100);
+        assertThat(sharecart.y()).isEqualTo(1);
+        assertThat(sharecart.misc(0)).isEqualTo(38424);
+        assertThat(sharecart.misc(1)).isZero();
+        assertThat(sharecart.misc(2)).isZero();
+        assertThat(sharecart.misc(3)).isZero();
+
+        assertThat(sharecart.name()).isEqualTo(Sharecart.DEFAULT_NAME);
+
+        for (int i = 0; i < Constraints.SWITCH_ITEMS_LENGTH; i++) {
+            assertThat(sharecart.switchValue(i)).isFalse();
+        }
+    }
+
+    @Test
+    public void testRead_partial_file_strict() throws Exception {
+        SharecartFileReader reader = new SharecartFileReader(partialFile);
+        reader.setIsStrict(true);
+
+        try {
+            reader.read();
+            failBecauseExceptionWasNotThrown(SharecartFormatException.class);
+        } catch (SharecartFormatException e) {
+            assertThat(e).hasMessage("File 'test/resources/sharecart_partial.ini', line 4: " +
+                    "Encountered end of file prematurely");
         }
     }
 

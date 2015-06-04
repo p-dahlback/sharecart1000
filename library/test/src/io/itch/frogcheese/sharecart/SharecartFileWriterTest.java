@@ -96,7 +96,7 @@ public class SharecartFileWriterTest {
     @Test
     public void testConstruct_rejects_null() throws Exception {
         try {
-            new SharecartFileWriter((File) null);
+            new SharecartFileWriter(null);
             failBecauseExceptionWasNotThrown(IllegalArgumentException.class);
         } catch (IllegalArgumentException ignored) {
 
