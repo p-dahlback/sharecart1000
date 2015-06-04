@@ -5,7 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 
-public abstract class ShareCartFileInterface {
+abstract class ShareCartFileInterface {
 
     private static final String DAT_DIRECTORY = "dat";
     private static final String SHARECART_FILE = "o_o.ini";
