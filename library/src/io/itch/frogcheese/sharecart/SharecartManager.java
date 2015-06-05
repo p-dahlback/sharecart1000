@@ -20,6 +20,7 @@ public class ShareCartManager {
     private ShareCartConfig config;
 
     private ShareCart shareCart;
+    private boolean searchedForFile = false;
     private boolean valid = false;
     private boolean loaded = false;
     private boolean saved = true;
@@ -34,13 +35,12 @@ public class ShareCartManager {
     }
 
     /**
-     * @return The singleton instance.
-     * @throws IllegalStateException if a call to {@link #initialize(ShareCartConfig)} has not been made.
+     * @return The singleton instance. If {@link #initialize(ShareCartConfig)} has not been called, an instance
+     * will be created with a default configuration.
      */
     public static ShareCartManager get() {
         if (INSTANCE == null) {
-            throw new IllegalStateException("ShareCartManager uninitialized. " +
-                    "Please make a call to 'initialize' before using the ShareCartManager.");
+            initialize(new ShareCartConfig.Builder().build());
         }
         return INSTANCE;
     }
@@ -56,7 +56,7 @@ public class ShareCartManager {
      *
      * @return {@code true} if there was a valid file, or if the file was successfully created. {@code false} otherwise.
      */
-    public boolean validateSharecartFile() {
+    public boolean findSharecartFile() {
         if (this.config.willAutoCreateFile()) {
             this.shareCartFile = this.fileInterface.findOrCreateIniFile(this.config.getDirectoryLevelsToCheck(),
                     this.config.getApplicationPath());
@@ -66,21 +66,22 @@ public class ShareCartManager {
         }
 
         this.valid = this.shareCartFile != null;
+        this.searchedForFile = true;
         return this.valid;
     }
 
     /**
      * Loads the contents of a valid shareCart file. This will perform IO operations on the current thread.
-     * This method cannot be called before a successful call to {@link #validateSharecartFile()}.
+     * This method cannot be called before a successful call to {@link #findSharecartFile()}.
      *
      * @return {@code true} if the contents of the file was successfully loaded. {@code false} otherwise.
-     * @throws IllegalStateException if {@link #validateSharecartFile()} hasn't been successfully called
+     * @throws IllegalStateException if {@link #findSharecartFile()} hasn't been successfully called
      * @throws ShareCartException    if an unhandled error occurs when reading the shareCart. This will only be thrown if
      *                               {@link ShareCartConfig#isStrictFileReadMode()} is false.
      */
     public boolean load() {
         if (!this.valid)
-            throw new IllegalStateException("Cannot load file before validateSharecartFile() has been called.");
+            throw new IllegalStateException("Cannot load file before findSharecartFile() has been called.");
 
         if (shareCartFile.isAutoCreated()) {
             this.loaded = true;
@@ -127,12 +128,12 @@ public class ShareCartManager {
      * Saves changes to the shareCart file. This will perform IO operations on the current thread.
      *
      * @return {@code true} if the changes could be saved.
-     * @throws IllegalStateException if {@link #validateSharecartFile()} or {@link #load()} have not been called.
+     * @throws IllegalStateException if {@link #findSharecartFile()} or {@link #load()} have not been called.
      */
     public boolean save() {
         if (!this.valid)
             throw new IllegalStateException(
-                    "Cannot load file before validateSharecartFile() has been called.");
+                    "Cannot load file before findSharecartFile() has been called.");
         if (!this.loaded || this.shareCart == null)
             throw new IllegalStateException(
                     "Cannot save file before it has been loaded at least once.");
@@ -321,9 +322,13 @@ public class ShareCartManager {
     }
 
     /**
-     * @return Whether or not a valid shareCart file has been found.
+     * @return Whether or not a valid shareCart file has been found. This will call {@link #findSharecartFile()}
+     * if it hasn't been called yet.
      */
     public boolean isValidSharecartFile() {
+        if(!this.searchedForFile) {
+            findSharecartFile();
+        }
         return this.valid;
     }
 

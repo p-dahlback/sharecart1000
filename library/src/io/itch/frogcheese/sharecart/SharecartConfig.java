@@ -35,12 +35,13 @@ public class ShareCartConfig {
         }
 
         /**
-         * Sets whether the sharecart should assign default values or throw an exception when there are errors
+         * Sets whether to assign default values or throw an exception when encountering errors
          * in the sharecart file.
          *
-         * @param strict if true, parameters will get default values if there are errors in the file.
-         *               If false, exceptions will be thrown on encountered errors.
+         * @param strict if {@code true}, parameters will get default values if there are errors in the file.
+         *               If {@code false}, a ShareCartFormatException will be thrown when encountering an error.
          * @return This Builder instance.
+         * @see io.itch.frogcheese.sharecart.error.ShareCartFormatException
          */
         public Builder setStrictFileReadMode(boolean strict) {
             config.strictFileMode = strict;
@@ -64,8 +65,15 @@ public class ShareCartConfig {
         /**
          * Sets whether or not the sharecart parameters will automatically be clamped to within constraints.
          *
-         * @param clampToConstraints
+         * @param clampToConstraints if {@code true}, any values that are not within the minimum and maximum value
+         *                           for that parameter will be automatically set to either the maximum or the minimum
+         *                           - whichever is the closest.
+         *                           <br/><br/>
+         *                           if {@code false}, trying to set a value that does not fulfill these constraints causes
+         *                           an InvalidParameterException to be thrown.
          * @return This Builder instance.
+         * @see Constraints
+         * @see io.itch.frogcheese.sharecart.error.InvalidParameterException
          */
         public Builder setClampToConstraints(boolean clampToConstraints) {
             config.clampToConstraints = clampToConstraints;
@@ -127,15 +135,35 @@ public class ShareCartConfig {
     }
 
     /**
-     * @return Whether or not the sharecart parameters will automatically be clamped to be within constraints.
+     * Gets whether parameters will automatically be clamped to be within constraints.
+     *
+     * @return The value of the flag.
+     * <p/>
+     * <br/><br/>
+     * If {@code true}, any values that are not within the minimum and maximum value
+     * for that parameter will be automatically set to either the maximum or the minimum
+     * - whichever is the closest.
+     * <br/><br/>
+     * If {@code false}, trying to set a value that does not fulfill these constraints causes
+     * an InvalidParameterException to be thrown.
+     * @see Constraints
+     * @see io.itch.frogcheese.sharecart.error.InvalidParameterException
      */
     public boolean willClampToConstraints() {
         return clampToConstraints;
     }
 
     /**
-     * @return Whether default values will be assigned when encountering errors in the sharecart file,
-     * or exceptions will be thrown. If true, exceptions will be thrown for faulty files.
+     * Gets whether to assign default values or throw an exception when encountering errors
+     * when reading the sharecart file.
+     *
+     * @return The value of the flag.
+     * <p/>
+     * <br/><br/>
+     * If {@code true}, parameters will get default values if there are errors in the file.
+     * <br/><br/>
+     * If {@code false}, a ShareCartFormatException will be thrown when encountering an error.
+     * @see io.itch.frogcheese.sharecart.error.ShareCartFormatException
      */
     public boolean isStrictFileReadMode() {
         return strictFileMode;

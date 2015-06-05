@@ -13,6 +13,11 @@ public class ParameterNotAccessibleException extends ShareCartException {
      */
     private static final long serialVersionUID = 1L;
 
+    /**
+     * Creates a new exception for the given parameter.
+     *
+     * @param parameter the name of the parameter
+     */
     public ParameterNotAccessibleException(String parameter) {
         super(String.format(Locale.US, "Can't access parameter '%s' without valid sharecart file.", parameter));
     }

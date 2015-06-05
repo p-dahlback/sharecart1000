@@ -93,7 +93,7 @@ public abstract class ShareCartManagerTestBase {
     @Test
     public void testFind_valid_file_above_app_directory_failure() throws Exception {
         mockFileSearchResult(null);
-        boolean valid = manager.validateSharecartFile();
+        boolean valid = manager.findSharecartFile();
         assertThat(valid).isFalse();
         assertThat(manager.isValidSharecartFile()).isFalse();
         assertThat(manager.isLoaded()).isFalse();
@@ -107,7 +107,7 @@ public abstract class ShareCartManagerTestBase {
     @Test
     public void testFind_valid_file_above_app_directory_success() throws Exception {
         mockFileSearchResult(shareCartFile);
-        boolean valid = manager.validateSharecartFile();
+        boolean valid = manager.findSharecartFile();
         assertThat(valid).isTrue();
         assertThat(manager.isValidSharecartFile()).isTrue();
         assertThat(manager.isLoaded()).isFalse();
@@ -130,7 +130,7 @@ public abstract class ShareCartManagerTestBase {
         ShareCartManager.initialize(config);
         manager = ShareCartManager.get();
 
-        boolean valid = manager.validateSharecartFile();
+        boolean valid = manager.findSharecartFile();
         assertThat(valid).isTrue();
         assertThat(manager.isValidSharecartFile()).isTrue();
         assertThat(manager.isLoaded()).isFalse();
@@ -162,7 +162,7 @@ public abstract class ShareCartManagerTestBase {
         ShareCartManager.initialize(config);
         manager = ShareCartManager.get();
 
-        boolean valid = manager.validateSharecartFile();
+        boolean valid = manager.findSharecartFile();
         assertThat(valid).isTrue();
         assertThat(manager.isValidSharecartFile()).isTrue();
         assertThat(manager.isLoaded()).isFalse();
@@ -263,7 +263,7 @@ public abstract class ShareCartManagerTestBase {
     protected void loadSharecart() {
         mockFileSearchResult(shareCartFile);
         when(mockReader.read()).thenReturn(ShareCart.withDefaults());
-        manager.validateSharecartFile();
+        manager.findSharecartFile();
         manager.load();
 
         assertThat(manager.isValidSharecartFile()).isTrue();

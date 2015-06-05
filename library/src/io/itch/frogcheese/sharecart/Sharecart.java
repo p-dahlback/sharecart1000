@@ -14,7 +14,9 @@ class ShareCart {
     private String name = DEFAULT_NAME;
     private boolean[] switches = new boolean[Constraints.SWITCH_ITEMS_LENGTH];
 
-
+    /**
+     * @return A new ShareCart instance with all parameters set to their defaults.
+     */
     public static ShareCart withDefaults() {
         ShareCart shareCart = new ShareCart();
         shareCart.x(0);
@@ -45,14 +47,27 @@ class ShareCart {
         this.y = y;
     }
 
+    /**
+     * @param index the index of the value. Must be less than {@link Constraints#MISC_ITEMS_LENGTH}.
+     * @return The misc value at the given index.
+     */
     public int misc(int index) {
         return this.misc[index];
     }
 
+    /**
+     * Sets the misc value at the given index.
+     *
+     * @param index the index of the value. Must be less than {@link Constraints#MISC_ITEMS_LENGTH}.
+     * @param value the value to use.
+     */
     public void misc(int index, int value) {
         this.misc[index] = value;
     }
 
+    /**
+     * @return The amount of available misc parameters.
+     */
     public int miscLength() {
         return this.misc.length;
     }
@@ -65,14 +80,27 @@ class ShareCart {
         this.name = name;
     }
 
+    /**
+     * @param index the index of the value. Must be less than {@link Constraints#SWITCH_ITEMS_LENGTH}.
+     * @return The switch value at the given index.
+     */
     public boolean switchValue(int index) {
         return this.switches[index];
     }
 
+    /**
+     * Sets the switch value at the given index.
+     *
+     * @param index the index of the value. Must be less than {@link Constraints#SWITCH_ITEMS_LENGTH}.
+     * @param value the value to use.
+     */
     public void switchValue(int index, boolean value) {
         this.switches[index] = value;
     }
 
+    /**
+     * @return The amount of available switch parameters.
+     */
     public int switchLength() {
         return this.switches.length;
     }

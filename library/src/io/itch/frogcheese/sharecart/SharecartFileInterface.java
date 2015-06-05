@@ -4,7 +4,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-
+/**
+ * Singleton for letting the framework interface with the file system.
+ */
 abstract class ShareCartFileInterface {
 
     private static final String DAT_DIRECTORY = "dat";
@@ -14,24 +16,64 @@ abstract class ShareCartFileInterface {
     private static ShareCartFileInterface INSTANCE = null;
 
 
+    /**
+     * @return The singleton instance. If {@link #inject(ShareCartFileInterface)} has not been called, this will create
+     * and return a default implementation.
+     */
     public static ShareCartFileInterface get() {
-        if(INSTANCE == null) {
+        if (INSTANCE == null) {
             INSTANCE = new ShareCartFileInterfaceImpl();
         }
         return INSTANCE;
     }
 
+    /**
+     * Inject the given implementation as the singleton instance.
+     *
+     * @param impl The class implementation to use.
+     */
     public static void inject(ShareCartFileInterface impl) {
         INSTANCE = impl;
     }
 
+    /**
+     * Creates a ShareCartFileReader for reading from the given file.
+     *
+     * @param file The file that should be read.
+     * @return A new reader for the file.
+     * @throws FileNotFoundException
+     */
     public abstract ShareCartFileReader getNewSharecartFileReader(ShareCartFile file) throws FileNotFoundException;
 
+    /**
+     * Creates a new ShareCartFileWriter for writing to the given file.
+     *
+     * @param file The file that should be written to.
+     * @return A new writer for the file.
+     * @throws FileNotFoundException
+     */
     public abstract ShareCartFileWriter getNewSharecartFileWriter(ShareCartFile file) throws FileNotFoundException;
 
+    /**
+     * Traverses through the file tree to find the sharecart .ini file.
+     *
+     * @param directoryLevelsToCheck The amount of upward levels in the file tree to traverse.
+     * @param startingPath           The path in which the search should start. This path must point to an existing directory
+     *                               on the file system.
+     * @return A sharecart file, or null if one couldn't be found.
+     */
     public abstract ShareCartFile findIniFile(int directoryLevelsToCheck, String startingPath);
 
+    /**
+     * Traverses through the file tree to find the sharecart .ini file. If one isn't found, it will be created.
+     *
+     * @param directoryLevelsToCheck The amount of upward levels in the file tree to traverse.
+     * @param startingPath           The path in which the search should start. This path must point to an existing directory
+     *                               on the file system.
+     * @return A sharecart file, or null if one couldn't be found or created.
+     */
     public abstract ShareCartFile findOrCreateIniFile(int directoryLevelsToCheck, String startingPath);
+
 
     /**
      * Default implementation.
@@ -68,7 +110,7 @@ abstract class ShareCartFileInterface {
                     }
                 }
             }
-            if(createIfNotExists) {
+            if (createIfNotExists) {
                 return createDatDirectory(directoryLevelsToCheck, startingPath);
             }
             return null;

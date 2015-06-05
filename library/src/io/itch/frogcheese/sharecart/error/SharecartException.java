@@ -6,19 +6,38 @@ package io.itch.frogcheese.sharecart.error;
  */
 public class ShareCartException extends RuntimeException {
 
+    /**
+     * Creates a new sharecart exception with no message.
+     */
     public ShareCartException() {
     }
 
-    public ShareCartException(String s) {
-        super(s);
+    /**
+     * Creates a new sharecart exception with the given message.
+     *
+     * @param message the exception's message.
+     */
+    public ShareCartException(String message) {
+        super(message);
     }
 
-    public ShareCartException(String s, Throwable throwable) {
-        super(s, throwable);
+    /**
+     * Creates a new sharecart exception with the given message and cause.
+     *
+     * @param message the exception's message.
+     * @param cause   the original cause of the exception.
+     */
+    public ShareCartException(String message, Throwable cause) {
+        super(message, cause);
     }
 
-    public ShareCartException(Throwable throwable) {
-        super(throwable);
+    /**
+     * Creates a new sharecart exception with the given cause.
+     *
+     * @param cause the original cause of the exception.
+     */
+    public ShareCartException(Throwable cause) {
+        super(cause);
     }
 
 }
