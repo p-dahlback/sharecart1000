@@ -47,16 +47,24 @@ class ShareCartFileReader implements Closeable {
     /**
      * Set whether or not the reader should fail when encountering an error in the file.
      *
-     * @param strict If true, the reader will fail with an exception for a poorly formatted or erroneous file. If false,
-     *               the reader will silently ignore any faulty parameters and instead assign a default value.
+     * @param strict if {@code true}, the reader will fail with an exception for a poorly formatted or erroneous file.
+     *               <br/><br/>
+     *               if false, the reader will silently ignore any faulty parameters and instead assign a default value.
+     * @see ShareCartFormatException
      */
     public void setIsStrict(boolean strict) {
         isStrict = strict;
     }
 
     /**
-     * @return Whether or not the reader will fail with an exception when encountering an error in the file's format.
-     * If false, any faulty parameters will be substituted with default values.
+     * Gets whether or not the reader will fail with an exception when encountering an error in the file's format.
+     *
+     * @return The flag value.
+     * <br/><br/>
+     * if {@code true}, the reader will fail with an exception for a poorly formatted or erroneous file.
+     * <br/><br/>
+     * if false, the reader will silently ignore any faulty parameters and instead assign a default value.
+     * @see ShareCartFormatException
      */
     public boolean isStrict() {
         return isStrict;
@@ -71,33 +79,31 @@ class ShareCartFileReader implements Closeable {
         ShareCart ret = ShareCart.withDefaults();
 
         try {
-            // Skip title
-            scanner.next();
-            currentLine++;
+            readTitle();
+            incrementLineNumber();
 
             int x = readInt(ShareCartFileConstants.PARAMETER_X);
             ret.x(validateX(x));
-            currentLine++;
+            incrementLineNumber();
 
             int y = readInt(ShareCartFileConstants.PARAMETER_Y);
             ret.y(validateY(y));
-            currentLine++;
+            incrementLineNumber();
 
             for (int i = 0; i < ShareCartFileConstants.PARAMETER_MISC.length; i++) {
                 int misc = readInt(ShareCartFileConstants.PARAMETER_MISC[i]);
                 ret.misc(i, validateMisc(i, misc));
-                currentLine++;
+                incrementLineNumber();
             }
 
             String name = readString(ShareCartFileConstants.PARAMETER_NAME);
             ret.name(validateName(name));
-            currentLine++;
+            incrementLineNumber();
 
             for (int i = 0; i < ShareCartFileConstants.PARAMETER_SWITCH.length; i++) {
                 ret.switchValue(i, readBoolean(ShareCartFileConstants.PARAMETER_SWITCH[i]));
-                currentLine++;
+                incrementLineNumber();
             }
-            checkConstraints(ret);
 
         } catch (NoSuchElementException e) {
             if (isStrict()) {
@@ -144,28 +150,6 @@ class ShareCartFileReader implements Closeable {
         return name;
     }
 
-    private void checkConstraints(ShareCart shareCart) {
-
-        int y = shareCart.y();
-
-
-        for (int i = 0; i < ShareCartFileConstants.PARAMETER_MISC.length; i++) {
-            int misc = shareCart.misc(i);
-            if (!Constraints.validMisc(misc)) {
-                if (isStrict())
-                    throwConstraintException(ShareCartFileConstants.PARAMETER_MISC[i], misc);
-                shareCart.misc(i, Constraints.clampMisc(misc));
-            }
-        }
-
-        String name = shareCart.name();
-        if (!Constraints.validName(name)) {
-            if (isStrict())
-                throwConstraintException(ShareCartFileConstants.PARAMETER_NAME, name);
-            shareCart.name(Constraints.clampName(name));
-        }
-    }
-
     private int readInt(String key) {
         String value = readString(key);
         if (value.length() == 0 || !StringUtils.isNumeric(value)) {
@@ -176,6 +160,28 @@ class ShareCartFileReader implements Closeable {
         }
 
         return Integer.valueOf(value);
+    }
+
+    private boolean readBoolean(String key) {
+        String value = readString(key);
+        if (value.length() == 0) {
+            if (isStrict()) {
+                throwInvalidValueFormatException(value, VALUE_TYPE_BOOLEAN);
+            }
+            return false;
+        }
+        if (StringUtils.isNumeric(value)) {
+            if (isStrict()) {
+                throwInvalidValueFormatException(value, VALUE_TYPE_BOOLEAN);
+            }
+            return Integer.valueOf(value) != 0;
+        }
+        if (value.equalsIgnoreCase("true") || value.equalsIgnoreCase("false")) {
+            return Boolean.valueOf(value);
+        } else if (isStrict()) {
+            throwInvalidValueFormatException(value, VALUE_TYPE_BOOLEAN);
+        }
+        return false;
     }
 
     private String readString(String key) {
@@ -210,30 +216,25 @@ class ShareCartFileReader implements Closeable {
         return valueString;
     }
 
-    private boolean readBoolean(String key) {
-        String value = readString(key);
-        if (value.length() == 0) {
-            if (isStrict()) {
-                throwInvalidValueFormatException(value, VALUE_TYPE_BOOLEAN);
-            }
-            return false;
+    private void readTitle() {
+        String token = getNextToken();
+        if (!ShareCartFileConstants.TITLE.equalsIgnoreCase(token)) {
+            if (isStrict())
+                throw new ShareCartFormatException("File '%s', line %d: Found '%s' where '%s' was expected",
+                        path, currentLine, token, ShareCartFileConstants.TITLE);
+
+            latestToken = token;
         }
-        if (StringUtils.isNumeric(value)) {
-            if (isStrict()) {
-                throwInvalidValueFormatException(value, VALUE_TYPE_BOOLEAN);
-            }
-            return Integer.valueOf(value) != 0;
-        }
-        if (value.equalsIgnoreCase("true") || value.equalsIgnoreCase("false")) {
-            return Boolean.valueOf(value);
-        } else if (isStrict()) {
-            throwInvalidValueFormatException(value, VALUE_TYPE_BOOLEAN);
-        }
-        return false;
     }
 
     private String getNextToken() {
         return latestToken != null ? latestToken : scanner.next().replaceAll("\r", "");
+    }
+
+    private void incrementLineNumber() {
+        if (latestToken == null) {
+            currentLine++;
+        }
     }
 
     private Pair<String, String> getKeyValuePair(String token) {

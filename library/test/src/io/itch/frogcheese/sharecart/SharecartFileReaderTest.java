@@ -24,6 +24,7 @@ public class ShareCartFileReaderTest {
     private File emptyFile;
     private File partialFile;
     private File invalidFile;
+    private File missingTitleFile;
     private ShareCartFileReader reader;
 
     @Before
@@ -35,6 +36,7 @@ public class ShareCartFileReaderTest {
         invalidParamNameFile = new File(TEST_RESOURCES_PATH, "sharecart_invalid_parameter_name.ini");
         emptyFile = new File(TEST_RESOURCES_PATH, "sharecart_empty.ini");
         partialFile = new File(TEST_RESOURCES_PATH, "sharecart_partial.ini");
+        missingTitleFile = new File(TEST_RESOURCES_PATH, "sharecart_missing_title.ini");
         invalidFile = new File(TEST_RESOURCES_PATH, "invalidFile");
     }
 
@@ -52,6 +54,10 @@ public class ShareCartFileReaderTest {
         assertThat(constraintFailureFile).isFile();
         assertThat(invalidParamDefinitionFile).isFile();
         assertThat(invalidParamNameFile).isFile();
+        assertThat(emptyFile).isFile();
+        assertThat(partialFile).isFile();
+        assertThat(missingTitleFile).isFile();
+        assertThat(invalidFile).doesNotExist();
     }
 
     @Test
@@ -245,6 +251,30 @@ public class ShareCartFileReaderTest {
             assertThat(e).hasMessage("File 'test/resources/sharecart_partial.ini', line 4: " +
                     "Encountered end of file prematurely");
         }
+    }
+
+    @Test
+    public void testRead_missing_title_file() throws Exception {
+        ShareCartFileReader reader = new ShareCartFileReader(missingTitleFile);
+        reader.setIsStrict(false);
+
+        ShareCart shareCart = reader.read();
+        assertCorrectFileMatchesParameters(shareCart);
+    }
+
+    @Test
+    public void testRead_missing_title_file_strict() throws Exception {
+        ShareCartFileReader reader = new ShareCartFileReader(missingTitleFile);
+        reader.setIsStrict(true);
+
+        try {
+            reader.read();
+            failBecauseExceptionWasNotThrown(ShareCartFormatException.class);
+        } catch (ShareCartFormatException e) {
+            assertThat(e).hasMessage("File 'test/resources/sharecart_missing_title.ini', line 0: " +
+                    "Found 'MapX=100' where '[Main]' was expected");
+        }
+
     }
 
     private void assertCorrectFileMatchesParameters(ShareCart shareCart) {
