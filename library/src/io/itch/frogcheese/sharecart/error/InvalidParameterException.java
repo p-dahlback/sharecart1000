@@ -3,14 +3,10 @@ package io.itch.frogcheese.sharecart.error;
 import java.util.Locale;
 
 /**
- * Describes when a parameter could not be modified because the new value
- * was invalid.
+ * Describes when a parameter could not be modified because the new value was invalid.
  */
 public class InvalidParameterException extends ShareCartException {
 
-    /**
-     *
-     */
     private static final long serialVersionUID = 1L;
 
     /**

@@ -13,9 +13,7 @@ import java.io.FileReader;
 import java.util.Locale;
 
 import static io.itch.frogcheese.sharecart.ShareCartFileConstants.*;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.fail;
-import static org.assertj.core.api.Assertions.failBecauseExceptionWasNotThrown;
+import static org.assertj.core.api.Assertions.*;
 
 public class ShareCartFileWriterTest {
 
@@ -24,11 +22,11 @@ public class ShareCartFileWriterTest {
 
     private static final int X_VALUE = 44;
     private static final int Y_VALUE = 56;
-    private static final int MISC_VALUES[] = new int[]{
+    private static final int MISC_VALUES[] = new int[] {
             1000, 1, 20121, 145
     };
     private static final String NAME_VALUE = "Rob Robertson";
-    private static final boolean SWITCH_VALUES[] = new boolean[]{
+    private static final boolean SWITCH_VALUES[] = new boolean[] {
             true, false, true, true, false, true, false, false
     };
 

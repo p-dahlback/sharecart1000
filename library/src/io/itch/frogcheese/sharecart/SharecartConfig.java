@@ -8,9 +8,10 @@ public class ShareCartConfig {
     static final int DEFAULT_LEVELS_TO_CHECK = 4;
 
     private boolean createSharecartIfNotExists = false;
-    private int directoryLevelsToCheck = DEFAULT_LEVELS_TO_CHECK;
     private boolean clampToConstraints = false;
     private boolean strictFileMode = false;
+
+    private int directoryLevelsToCheck = DEFAULT_LEVELS_TO_CHECK;
     private String applicationPath;
 
     /**
@@ -27,6 +28,7 @@ public class ShareCartConfig {
          * Sets whether or not the sharecart file will be created if it is missing.
          *
          * @param create if true, a new sharecart file with the correct structure will be created if one isn't found.
+         *
          * @return This Builder instance.
          */
         public Builder setAutoCreateFile(boolean create) {
@@ -40,7 +42,9 @@ public class ShareCartConfig {
          *
          * @param strict if {@code true}, parameters will get default values if there are errors in the file.
          *               If {@code false}, a ShareCartFormatException will be thrown when encountering an error.
+         *
          * @return This Builder instance.
+         *
          * @see io.itch.frogcheese.sharecart.error.ShareCartFormatException
          */
         public Builder setStrictFileReadMode(boolean strict) {
@@ -52,6 +56,7 @@ public class ShareCartConfig {
          * Sets the amount of directories above the application path to check for the existence of a sharecart file.
          *
          * @param levels the amount of levels to traverse upward when searching for the sharecart file.
+         *
          * @return This Builder instance.
          */
         public Builder setDirectoryLevelsToCheck(int levels) {
@@ -71,7 +76,9 @@ public class ShareCartConfig {
          *                           <br/><br/>
          *                           if {@code false}, trying to set a value that does not fulfill these constraints causes
          *                           an InvalidParameterException to be thrown.
+         *
          * @return This Builder instance.
+         *
          * @see Constraints
          * @see io.itch.frogcheese.sharecart.error.InvalidParameterException
          */
@@ -85,6 +92,7 @@ public class ShareCartConfig {
          * This can also be assigned through the System property "application.dir".
          *
          * @param path the path to the application package.
+         *
          * @return This Builder instance.
          */
         public Builder setApplicationPath(String path) {
@@ -138,7 +146,6 @@ public class ShareCartConfig {
      * Gets whether parameters will automatically be clamped to be within constraints.
      *
      * @return The value of the flag.
-     * <p/>
      * <br/><br/>
      * If {@code true}, any values that are not within the minimum and maximum value
      * for that parameter will be automatically set to either the maximum or the minimum
@@ -146,6 +153,7 @@ public class ShareCartConfig {
      * <br/><br/>
      * If {@code false}, trying to set a value that does not fulfill these constraints causes
      * an InvalidParameterException to be thrown.
+     *
      * @see Constraints
      * @see io.itch.frogcheese.sharecart.error.InvalidParameterException
      */
@@ -158,11 +166,11 @@ public class ShareCartConfig {
      * when reading the sharecart file.
      *
      * @return The value of the flag.
-     * <p/>
      * <br/><br/>
      * If {@code true}, parameters will get default values if there are errors in the file.
      * <br/><br/>
      * If {@code false}, a ShareCartFormatException will be thrown when encountering an error.
+     *
      * @see io.itch.frogcheese.sharecart.error.ShareCartFormatException
      */
     public boolean isStrictFileReadMode() {

@@ -32,6 +32,7 @@ public class Constraints {
 
     /**
      * @param x the value to check.
+     *
      * @return Whether or not the given value conforms to the constraints for the x parameter.
      */
     public static boolean validX(int x) {
@@ -42,6 +43,7 @@ public class Constraints {
      * Clamps the given value to within the constraints for the x parameter.
      *
      * @param x the value to check.
+     *
      * @return the provided value, clamped to be within the constraints for x.
      */
     public static short clampX(int x) {
@@ -50,6 +52,7 @@ public class Constraints {
 
     /**
      * @param y the value to check.
+     *
      * @return Whether or not the given value conforms to the constraints for the y parameter.
      */
     public static boolean validY(int y) {
@@ -60,6 +63,7 @@ public class Constraints {
      * Clamps the given value to within the constraints for the y parameter.
      *
      * @param y the value to check.
+     *
      * @return the provided value, clamped to be within the constraints for y.
      */
     public static short clampY(int y) {
@@ -68,6 +72,7 @@ public class Constraints {
 
     /**
      * @param misc the value to check.
+     *
      * @return Whether or not the given value conforms to the constraints for the misc parameters.
      */
     public static boolean validMisc(int misc) {
@@ -76,6 +81,7 @@ public class Constraints {
 
     /**
      * @param index the index to check.
+     *
      * @return Whether or not the given index is a valid misc parameter.
      */
     public static boolean validMiscIndex(int index) {
@@ -86,6 +92,7 @@ public class Constraints {
      * Clamps the given value to within the constraints for the misc parameter.
      *
      * @param misc the value to check.
+     *
      * @return the provided value, clamped to be within the constraints for misc.
      */
     public static int clampMisc(int misc) {
@@ -94,6 +101,7 @@ public class Constraints {
 
     /**
      * @param name the value to check.
+     *
      * @return Whether or not the given value conforms to the constraints for the name parameter.
      */
     public static boolean validName(String name) {
@@ -104,6 +112,7 @@ public class Constraints {
      * Clamps the given value to within the constraints for the name parameter.
      *
      * @param name the value to check.
+     *
      * @return the provided value. If the value is null, an empty string is returned. If the value is too long, a substring
      * of the maximum length will be returned.
      */
@@ -117,6 +126,7 @@ public class Constraints {
 
     /**
      * @param index the index to check.
+     *
      * @return Whether or not the given index is a valid switch parameter.
      */
     public static boolean validSwitchIndex(int index) {

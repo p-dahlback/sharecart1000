@@ -23,7 +23,7 @@ class ShareCartFileConstants {
     /**
      * Keys for the Misc parameters.
      */
-    public static final String[] PARAMETER_MISC = new String[]{
+    public static final String[] PARAMETER_MISC = new String[] {
             "Misc0", "Misc1", "Misc2", "Misc3"
     };
 
@@ -35,7 +35,7 @@ class ShareCartFileConstants {
     /**
      * Keys for the Switch parameters.
      */
-    public static final String[] PARAMETER_SWITCH = new String[]{
+    public static final String[] PARAMETER_SWITCH = new String[] {
             "Switch0", "Switch1", "Switch2", "Switch3", "Switch4", "Switch5", "Switch6", "Switch7"
     };
 

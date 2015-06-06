@@ -40,7 +40,9 @@ abstract class ShareCartFileInterface {
      * Creates a ShareCartFileReader for reading from the given file.
      *
      * @param file The file that should be read.
+     *
      * @return A new reader for the file.
+     *
      * @throws FileNotFoundException
      */
     public abstract ShareCartFileReader getNewSharecartFileReader(ShareCartFile file) throws FileNotFoundException;
@@ -49,7 +51,9 @@ abstract class ShareCartFileInterface {
      * Creates a new ShareCartFileWriter for writing to the given file.
      *
      * @param file The file that should be written to.
+     *
      * @return A new writer for the file.
+     *
      * @throws FileNotFoundException
      */
     public abstract ShareCartFileWriter getNewSharecartFileWriter(ShareCartFile file) throws FileNotFoundException;
@@ -60,6 +64,7 @@ abstract class ShareCartFileInterface {
      * @param directoryLevelsToCheck The amount of upward levels in the file tree to traverse.
      * @param startingPath           The path in which the search should start. This path must point to an existing directory
      *                               on the file system.
+     *
      * @return A sharecart file, or null if one couldn't be found.
      */
     public abstract ShareCartFile findIniFile(int directoryLevelsToCheck, String startingPath);
@@ -70,6 +75,7 @@ abstract class ShareCartFileInterface {
      * @param directoryLevelsToCheck The amount of upward levels in the file tree to traverse.
      * @param startingPath           The path in which the search should start. This path must point to an existing directory
      *                               on the file system.
+     *
      * @return A sharecart file, or null if one couldn't be found or created.
      */
     public abstract ShareCartFile findOrCreateIniFile(int directoryLevelsToCheck, String startingPath);

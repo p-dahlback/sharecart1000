@@ -3,14 +3,10 @@ package io.itch.frogcheese.sharecart.error;
 import java.util.Locale;
 
 /**
- * Describes when a parameter could not be accessed because of an invalid
- * sharecart state.
+ * Describes when a parameter could not be accessed because of an invalid sharecart state.
  */
 public class ParameterNotAccessibleException extends ShareCartException {
 
-    /**
-     *
-     */
     private static final long serialVersionUID = 1L;
 
     /**

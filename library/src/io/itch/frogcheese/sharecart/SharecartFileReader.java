@@ -33,6 +33,7 @@ class ShareCartFileReader implements Closeable {
      * Constructor.
      *
      * @param file the file that should be written to.
+     *
      * @throws FileNotFoundException
      */
     public ShareCartFileReader(File file) throws FileNotFoundException {
@@ -40,16 +41,16 @@ class ShareCartFileReader implements Closeable {
             throw new IllegalArgumentException("File cannot be null");
 
         path = file.getPath();
-        scanner = new Scanner(file)
-                .useDelimiter(ShareCartFileConstants.DELIMITER_PARAMETER_PATTERN);
+        scanner = new Scanner(file).useDelimiter(ShareCartFileConstants.DELIMITER_PARAMETER_PATTERN);
     }
 
     /**
      * Set whether or not the reader should fail when encountering an error in the file.
      *
      * @param strict if {@code true}, the reader will fail with an exception for a poorly formatted or erroneous file.
-     *               <br/><br/>
-     *               if false, the reader will silently ignore any faulty parameters and instead assign a default value.
+     *               <br/><br/> if false, the reader will silently ignore any faulty parameters and instead assign a
+     *               default value.
+     *
      * @see ShareCartFormatException
      */
     public void setIsStrict(boolean strict) {
@@ -59,11 +60,10 @@ class ShareCartFileReader implements Closeable {
     /**
      * Gets whether or not the reader will fail with an exception when encountering an error in the file's format.
      *
-     * @return The flag value.
-     * <br/><br/>
-     * if {@code true}, the reader will fail with an exception for a poorly formatted or erroneous file.
-     * <br/><br/>
-     * if false, the reader will silently ignore any faulty parameters and instead assign a default value.
+     * @return The flag value. <br/><br/> if {@code true}, the reader will fail with an exception for a poorly formatted
+     * or erroneous file. <br/><br/> if false, the reader will silently ignore any faulty parameters and instead assign
+     * a default value.
+     *
      * @see ShareCartFormatException
      */
     public boolean isStrict() {
@@ -269,7 +269,7 @@ class ShareCartFileReader implements Closeable {
 
     @Override
     public void close() throws IOException {
-        this.scanner.close();
+        scanner.close();
     }
 
 }

@@ -15,6 +15,7 @@ class ShareCartFileWriter implements Closeable {
      * Constructor.
      *
      * @param file the file that should be written to.
+     *
      * @throws FileNotFoundException
      */
     public ShareCartFileWriter(File file) throws FileNotFoundException {
@@ -25,7 +26,7 @@ class ShareCartFileWriter implements Closeable {
             // PrintWriter creates the file instead of throwing an exception.
             throw new FileNotFoundException(file.getAbsolutePath() + " could not be found");
 
-        this.writer = new PrintWriter(file);
+        writer = new PrintWriter(file);
     }
 
     /**
@@ -74,7 +75,7 @@ class ShareCartFileWriter implements Closeable {
         }
 
 
-        this.writer.write(file.toString());
+        writer.write(file.toString());
     }
 
     private String intString(int value) {
@@ -87,7 +88,7 @@ class ShareCartFileWriter implements Closeable {
 
     @Override
     public void close() throws IOException {
-        this.writer.close();
+        writer.close();
     }
 
 }

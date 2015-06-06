@@ -32,7 +32,7 @@ class ShareCart {
     }
 
     public int x() {
-        return this.x;
+        return x;
     }
 
     public void x(int x) {
@@ -40,7 +40,7 @@ class ShareCart {
     }
 
     public int y() {
-        return this.y;
+        return y;
     }
 
     public void y(int y) {
@@ -49,10 +49,11 @@ class ShareCart {
 
     /**
      * @param index the index of the value. Must be less than {@link Constraints#MISC_ITEMS_LENGTH}.
+     *
      * @return The misc value at the given index.
      */
     public int misc(int index) {
-        return this.misc[index];
+        return misc[index];
     }
 
     /**
@@ -62,18 +63,18 @@ class ShareCart {
      * @param value the value to use.
      */
     public void misc(int index, int value) {
-        this.misc[index] = value;
+        misc[index] = value;
     }
 
     /**
      * @return The amount of available misc parameters.
      */
     public int miscLength() {
-        return this.misc.length;
+        return misc.length;
     }
 
     public String name() {
-        return this.name;
+        return name;
     }
 
     public void name(String name) {
@@ -82,10 +83,11 @@ class ShareCart {
 
     /**
      * @param index the index of the value. Must be less than {@link Constraints#SWITCH_ITEMS_LENGTH}.
+     *
      * @return The switch value at the given index.
      */
     public boolean switchValue(int index) {
-        return this.switches[index];
+        return switches[index];
     }
 
     /**
@@ -95,14 +97,14 @@ class ShareCart {
      * @param value the value to use.
      */
     public void switchValue(int index, boolean value) {
-        this.switches[index] = value;
+        switches[index] = value;
     }
 
     /**
      * @return The amount of available switch parameters.
      */
     public int switchLength() {
-        return this.switches.length;
+        return switches.length;
     }
 
     @Override

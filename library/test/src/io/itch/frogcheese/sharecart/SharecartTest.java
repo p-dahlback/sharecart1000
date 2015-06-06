@@ -320,7 +320,7 @@ public class ShareCartTest {
         shareCart.name("This is a custom name!");
         assertThat(shareCart).isNotEqualTo(defaultCart);
 
-        for(int i = 0; i < Constraints.SWITCH_ITEMS_LENGTH; i++) {
+        for (int i = 0; i < Constraints.SWITCH_ITEMS_LENGTH; i++) {
             resetSharecart();
             assertThat(shareCart).isEqualTo(defaultCart);
             shareCart.switchValue(i, true);
