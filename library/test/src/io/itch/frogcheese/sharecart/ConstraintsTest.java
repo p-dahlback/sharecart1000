@@ -1,29 +1,12 @@
 package io.itch.frogcheese.sharecart;
 
 import io.itch.frogcheese.sharecart._test.Utils;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 
 import static io.itch.frogcheese.sharecart.Constraints.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ConstraintsTest {
-
-    @Before
-    public void setUp() throws Exception {
-
-    }
-
-    @After
-    public void tearDown() throws Exception {
-
-    }
-
-    @Test
-    public void testPreconditions() throws Exception {
-
-    }
 
     @Test
     public void testConstraint_values_are_correct() throws Exception {

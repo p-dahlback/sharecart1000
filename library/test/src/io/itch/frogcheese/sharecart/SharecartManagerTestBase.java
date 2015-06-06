@@ -22,17 +22,16 @@ import static org.mockito.Mockito.*;
 @Ignore("Base class containing some setup tests and logic")
 public abstract class ShareCartManagerTestBase {
 
-    protected static final String APPLICATION_PATH = Constants.TEST_RESOURCES_PATH + "games/subfolder/subsubfolder";
+    private static final String APPLICATION_PATH = Constants.TEST_RESOURCES_PATH + "games/subfolder/subsubfolder";
 
-    protected ShareCartFileReader mockReader;
-    protected ShareCartFileWriter mockWriter;
-    protected ShareCartFileInterface mockFileInterface;
+    ShareCartFileReader mockReader;
+    ShareCartFileWriter mockWriter;
+    ShareCartFileInterface mockFileInterface;
+    ShareCartFile shareCartFile;
 
-    protected ShareCartFile shareCartFile;
+    ShareCartConfig config;
+    ShareCartManager manager;
 
-    protected ShareCartManager manager;
-
-    protected ShareCartConfig config;
 
     @Before
     public void setUp() throws Exception {
@@ -260,7 +259,7 @@ public abstract class ShareCartManagerTestBase {
         }
     }
 
-    protected void loadSharecart() {
+    void loadSharecart() {
         mockFileSearchResult(shareCartFile);
         when(mockReader.read()).thenReturn(ShareCart.withDefaults());
         manager.findSharecartFile();
@@ -270,7 +269,7 @@ public abstract class ShareCartManagerTestBase {
         assertThat(manager.isLoaded()).isTrue();
     }
 
-    protected void mockFileSearchResult(ShareCartFile file) {
+    private void mockFileSearchResult(ShareCartFile file) {
         when(mockFileInterface.findIniFile(anyInt(), anyString())).thenReturn(file);
         when(mockFileInterface.findOrCreateIniFile(anyInt(), anyString())).thenReturn(file);
     }

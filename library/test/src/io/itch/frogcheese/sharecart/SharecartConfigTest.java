@@ -1,6 +1,5 @@
 package io.itch.frogcheese.sharecart;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -15,11 +14,6 @@ public class ShareCartConfigTest {
     @Before
     public void setUp() throws Exception {
         configBuilder = new ShareCartConfig.Builder();
-    }
-
-    @After
-    public void tearDown() throws Exception {
-
     }
 
     @Test

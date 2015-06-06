@@ -2,7 +2,6 @@ package io.itch.frogcheese.sharecart;
 
 
 import io.itch.frogcheese.sharecart._test.Constants;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -20,14 +19,9 @@ public class ShareCartFileTest {
         file = new File(Constants.TEST_RESOURCES_PATH, "dat/o_o.ini");
     }
 
-    @After
-    public void tearDown() throws Exception {
-
-    }
-
     @Test
     public void testPreconditions() throws Exception {
-
+        assertThat(file).isFile();
     }
 
     @Test
@@ -50,7 +44,7 @@ public class ShareCartFileTest {
     }
 
     @Test
-    public void testCreate_from_file_autocreated() throws Exception {
+    public void testCreate_from_file_auto_created() throws Exception {
         ShareCartFile model = ShareCartFile.fromAutoCreatedFile(file);
 
         assertThat(model).isNotNull();
@@ -59,7 +53,7 @@ public class ShareCartFileTest {
     }
 
     @Test
-    public void testCreate_from_file_autocreated_rejects_null() throws Exception {
+    public void testCreate_from_file_auto_created_rejects_null() throws Exception {
         try {
             ShareCartFile.fromAutoCreatedFile(null);
             failBecauseExceptionWasNotThrown(IllegalArgumentException.class);

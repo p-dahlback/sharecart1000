@@ -15,14 +15,14 @@ public class ShareCartManager {
     private static ShareCartManager INSTANCE;
 
     // Resources
-    private ShareCartFileInterface fileInterface;
-    
+    private final ShareCartFileInterface fileInterface;
+
     // File
     private ShareCartFile shareCartFile;
     private ShareCart shareCart;
 
     // State
-    private ShareCartConfig config;
+    private final ShareCartConfig config;
 
     private boolean searchedForFile = false;
     private boolean valid = false;
@@ -165,7 +165,7 @@ public class ShareCartManager {
      * @throws ParameterNotAccessibleException if the shareCart wasn't initialized.
      */
     public int x() {
-        if (!isReadable())
+        if (isNotReadable())
             throw new ParameterNotAccessibleException("x");
 
         return shareCart.x();
@@ -177,7 +177,7 @@ public class ShareCartManager {
      * @throws ParameterNotAccessibleException if the shareCart wasn't initialized.
      */
     public int y() {
-        if (!isReadable())
+        if (isNotReadable())
             throw new ParameterNotAccessibleException("y");
 
         return shareCart.y();
@@ -192,7 +192,7 @@ public class ShareCartManager {
      * @throws InvalidParameterException       if the value did not fit the constraints.
      */
     public void x(int value) {
-        if (!isWritable())
+        if (isNotWritable())
             throw new ParameterNotAccessibleException("x");
 
         if (config.willClampToConstraints()) {
@@ -214,7 +214,7 @@ public class ShareCartManager {
      * @throws InvalidParameterException       if the value did not fit the constraints.
      */
     public void y(int value) {
-        if (!isWritable())
+        if (isNotWritable())
             throw new ParameterNotAccessibleException("y");
 
         if (config.willClampToConstraints()) {
@@ -238,7 +238,7 @@ public class ShareCartManager {
      *                                         Constraints#MISC_ITEMS_LENGTH}.
      */
     public int misc(int index) {
-        if (!isReadable())
+        if (isNotReadable())
             throw new ParameterNotAccessibleException("misc" + index);
         if (!Constraints.validMiscIndex(index))
             throw new IndexOutOfBoundsException("misc" + index);
@@ -259,7 +259,7 @@ public class ShareCartManager {
      *                                         Constraints#MISC_ITEMS_LENGTH}.
      */
     public void misc(int index, int value) {
-        if (!isWritable())
+        if (isNotWritable())
             throw new ParameterNotAccessibleException("misc" + index);
 
         if (config.willClampToConstraints()) {
@@ -281,7 +281,7 @@ public class ShareCartManager {
      * @throws ParameterNotAccessibleException if the shareCart wasn't initialized.
      */
     public String name() {
-        if (!isReadable())
+        if (isNotReadable())
             throw new ParameterNotAccessibleException("name");
         return shareCart.name();
     }
@@ -294,7 +294,7 @@ public class ShareCartManager {
      * @throws ParameterNotAccessibleException if the shareCart wasn't initialized.
      */
     public void name(String value) {
-        if (!isWritable())
+        if (isNotWritable())
             throw new ParameterNotAccessibleException("name");
 
         if (config.willClampToConstraints()) {
@@ -318,7 +318,7 @@ public class ShareCartManager {
      *                                         Constraints#SWITCH_ITEMS_LENGTH}.
      */
     public boolean switchValue(int index) {
-        if (!isReadable())
+        if (isNotReadable())
             throw new ParameterNotAccessibleException("name");
         if (!Constraints.validSwitchIndex(index))
             throw new IndexOutOfBoundsException("switch" + index);
@@ -337,7 +337,7 @@ public class ShareCartManager {
      *                                         Constraints#SWITCH_ITEMS_LENGTH}.
      */
     public void switchValue(int index, boolean value) {
-        if (!isWritable())
+        if (isNotWritable())
             throw new ParameterNotAccessibleException("switch" + index);
         if (!Constraints.validSwitchIndex(index))
             throw new IndexOutOfBoundsException("switch" + index);
@@ -375,11 +375,11 @@ public class ShareCartManager {
         return config;
     }
 
-    private boolean isReadable() {
-        return valid && loaded;
+    private boolean isNotReadable() {
+        return !valid || !loaded;
     }
 
-    private boolean isWritable() {
-        return valid && loaded;
+    private boolean isNotWritable() {
+        return !valid || !loaded;
     }
 }

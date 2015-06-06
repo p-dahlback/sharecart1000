@@ -10,9 +10,9 @@ class ShareCart {
 
     private int x;
     private int y;
-    private int[] misc = new int[Constraints.MISC_ITEMS_LENGTH];
+    private final int[] misc = new int[Constraints.MISC_ITEMS_LENGTH];
     private String name = DEFAULT_NAME;
-    private boolean[] switches = new boolean[Constraints.SWITCH_ITEMS_LENGTH];
+    private final boolean[] switches = new boolean[Constraints.SWITCH_ITEMS_LENGTH];
 
     /**
      * @return A new ShareCart instance with all parameters set to their defaults.

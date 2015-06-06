@@ -1,6 +1,5 @@
 package io.itch.frogcheese.sharecart;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -18,11 +17,6 @@ public class ShareCartFileUtilsTest {
         System.clearProperty("application.dir");
         ShareCartFileUtils.APP_DIR = null;
         ShareCartFileUtils.RUNNING_DIR = null;
-    }
-
-    @After
-    public void tearDown() throws Exception {
-
     }
 
     @Test

@@ -33,4 +33,8 @@ public class Constants {
      * @see #TEST_EMPTY_SUBFOLDER_PATH
      */
     public static final String TEST_SUBFOLDER_INI_FILE_PATH = TEST_RESOURCES_PATH + "games/subfolder/dat/o_o.ini";
+
+    private Constants() {
+
+    }
 }

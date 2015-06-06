@@ -18,7 +18,7 @@ public class ShareCartConfig {
      * Utility class for creating a ShareCartConfig instance.
      */
     public static class Builder {
-        ShareCartConfig config;
+        final ShareCartConfig config;
 
         public Builder() {
             config = new ShareCartConfig();
